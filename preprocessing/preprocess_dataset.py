@@ -6,10 +6,6 @@ from preprocessing.letterbox import letterbox
 from preprocessing.xml_utils import resize_xml_labels, xml_to_txt
 
 ########################################################################################################################
-#                                                                                                                      #
-#                                               PREPROCESAMIENTO DE DATOS                                              #
-#                                                                                                                      #
-########################################################################################################################
 
 def load_image(path):
     """

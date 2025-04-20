@@ -1,5 +1,7 @@
 import cv2
 
+########################################################################################################################
+
 def letterbox(img, original_size, new_size=(512, 512), color=(114, 114, 114)):
     """
     Redimensiona una imagen manteniendo el aspect ratio y aplica padding

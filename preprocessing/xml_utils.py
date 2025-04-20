@@ -1,5 +1,7 @@
 import xml.etree.ElementTree as ET
 
+########################################################################################################################
+
 def resize_xml_labels(in_xml_path, new_size, original_size, crop_box, mode="classic_vision", scale=None, padding=(0, 0)):
     """
     Ajusta las coordenadas de las etiquetas en un archivo XML (formato Pascal VOC)
