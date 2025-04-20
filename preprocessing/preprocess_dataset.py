@@ -1,8 +1,9 @@
 from pathlib import Path
-import xml.etree.ElementTree as ET
 import cv2
 import numpy as np
 import glob
+from preprocessing.letterbox import letterbox
+from preprocessing.xml_utils import resize_xml_labels, xml_to_txt
 
 ########################################################################################################################
 #                                                                                                                      #
@@ -25,108 +26,6 @@ def load_image(path):
         raise FileNotFoundError(f"No se pudo cargar la imagen en la ruta: {path}")
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     return img
-
-
-def resize_xml_labels(in_xml_path, new_size, original_size, crop_box, mode="classic_vision", scale=None, padding=(0, 0)):
-    """
-    Ajusta las coordenadas de las etiquetas en un archivo XML (formato Pascal VOC)
-    cuando la imagen ha sido recortada y/o redimensionada.
-
-    Parámetros:
-        in_xml_path (str): Ruta al archivo XML original.
-        new_size (tuple): Nueva resolución de la imagen (ancho, alto).
-        original_size (tuple): Resolución original de la imagen (ancho, alto).
-        crop_box (tuple[int, int, int, int] | None): Coordenadas del recorte en formato (x0, y0, ancho, alto).
-        mode (str): Modo de procesamiento. Puede ser "classic_vision" o "deep_learning".
-        scale (float | None): Escala aplicada en letterbox (solo para deep_learning).
-        padding (tuple): Padding aplicado en letterbox (pad_x, pad_y).
-
-    Retorna:
-        tree (xml.etree.ElementTree.ElementTree): Árbol XML con las etiquetas actualizadas.
-    """
-    tree = ET.parse(in_xml_path)
-    root = tree.getroot()
-
-    new_w, new_h = new_size
-    orig_w, orig_h = original_size
-
-    if crop_box is None:
-        crop_x, crop_y, crop_w, crop_h = 0, 0, orig_w, orig_h
-    else:
-        crop_x, crop_y, crop_w, crop_h = crop_box
-
-    sx = new_w / crop_w
-    sy = new_h / crop_h
-
-    for obj in root.findall("object"):
-        bb = obj.find("bndbox")
-        xmin = int(float(bb.find("xmin").text)) - crop_x
-        xmax = int(float(bb.find("xmax").text)) - crop_x
-        ymin = int(float(bb.find("ymin").text)) - crop_y
-        ymax = int(float(bb.find("ymax").text)) - crop_y
-
-        xmin = max(0, min(xmin, crop_w))
-        xmax = max(0, min(xmax, crop_w))
-        ymin = max(0, min(ymin, crop_h))
-        ymax = max(0, min(ymax, crop_h))
-
-        if mode == "classic_vision":
-            bb.find("xmin").text = str(int(xmin * sx))
-            bb.find("xmax").text = str(int(xmax * sx))
-            bb.find("ymin").text = str(int(ymin * sy))
-            bb.find("ymax").text = str(int(ymax * sy))
-        elif mode == "deep_learning":
-            pad_x, pad_y = padding
-            xmin = xmin * scale + pad_x
-            xmax = xmax * scale + pad_x
-            ymin = ymin * scale + pad_y
-            ymax = ymax * scale + pad_y
-            bb.find("xmin").text = str(int(xmin))
-            bb.find("xmax").text = str(int(xmax))
-            bb.find("ymin").text = str(int(ymin))
-            bb.find("ymax").text = str(int(ymax))
-        else:
-            raise ValueError(f"Modo '{mode}' no reconocido")
-    return tree
-
-
-def xml_to_txt(tree, out_label_path, img_size, mode="classic_vision"):
-    """
-    Convierte un árbol XML a un archivo txt compatible con visión 
-    clásica o con YOLO (deep learning).
-
-    Parámetros:
-        tree (ElementTree): Árbol XML.
-        out_label_path (Path): Ruta al archivo txt de salida.
-        mode (str): 'clasica' para formato xmin,ymin,xmax,ymax,
-                    'deep learning' para formato YOLO normalizado.
-        img_size (tuple): Tamaño de la imagen final (ancho, alto).
-    """
-    root = tree.getroot()
-    w, h = img_size
-    lines = []
-
-    for obj in root.findall("object"):
-        name = obj.find("name").text
-        bndbox = obj.find("bndbox")
-        xmin = int(bndbox.find("xmin").text)
-        xmax = int(bndbox.find("xmax").text)
-        ymin = int(bndbox.find("ymin").text)
-        ymax = int(bndbox.find("ymax").text)
-
-        if mode == "classic_vision":
-            lines.append(f"{name} {xmin} {ymin} {xmax} {ymax}")
-        elif mode == "deep_learning":
-            x_center = (xmin + xmax) / 2 / w
-            y_center = (ymin + ymax) / 2 / h
-            width    = (xmax - xmin) / w
-            height   = (ymax - ymin) / h
-            lines.append(f"{name} {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f}")
-        else:
-            raise ValueError(f"Modo '{mode}' no reconocido")
-
-    with open(out_label_path, "w") as f:
-        f.write("\n".join(lines))
 
 
 def preprocess_cv(input_path, output_path, new_size):
@@ -169,41 +68,6 @@ def preprocess_cv(input_path, output_path, new_size):
             if in_label_path.exists():
                 tree = resize_xml_labels(in_label_path, new_size, original_size, crop_box, "classic_vision")
                 xml_to_txt(tree, out_label_path, new_size, "classic_vision")
-
-
-def letterbox(img, original_size, new_size=(512, 512), color=(114, 114, 114)):
-    """
-    Redimensiona una imagen manteniendo el aspect ratio y aplica padding
-    para ajustarla al tamaño deseado.
-
-    Parámetros:
-        img (np.ndarray): Imagen original
-        original_size (tuple): Tamaño original de la imagen (ancho, alto)
-        new_size (tuple): Tamaño final deseado (ancho, alto)
-        color (tuple): Color del padding
-
-    Retorna:
-        img_padded (np.ndarray): Imagen final con padding ajustada a new_size
-        scale (float): Escala aplicada para redimensionar la imagen original
-        padding (tuple): Padding aplicado (padding_x, padding_y)
-    """
-    orig_w, orig_h = original_size
-    new_w, new_h = new_size
-    scale = min(new_w / orig_w, new_h / orig_h)
-    resize_w, resize_h = int(orig_w * scale), int(orig_h * scale)
-
-    img_resized = cv2.resize(img, (resize_w, resize_h), interpolation=cv2.INTER_LINEAR)
-
-    pad_w = new_w - resize_w
-    pad_h = new_h - resize_h
-    top = pad_h // 2
-    bottom = pad_h - top
-    left = pad_w // 2
-    right = pad_w - left
-
-    img_padded = cv2.copyMakeBorder(img_resized, top, bottom, left, right,
-                                    borderType=cv2.BORDER_CONSTANT, value=color)
-    return img_padded, scale, (left, top)
 
 
 def preprocess_dl(input_path, output_path, new_size):
