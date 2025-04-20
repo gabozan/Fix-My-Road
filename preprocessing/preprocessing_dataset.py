@@ -283,7 +283,7 @@ if __name__ == "__main__":
         preprocess_dataset(input_folder, output_folder_dl, mode)
     elif mode == "all":
         preprocess_dataset(input_folder, output_folder_cv, "classic_vision")
-        preprocess_dataset(input_folder, output_folder_cv, "deep_learning")
+        preprocess_dataset(input_folder, output_folder_dl, "deep_learning")
     else:
         raise ValueError(f"Modo '{mode}' no reconocido")
     print("Preprocesado de datos finalizado")
