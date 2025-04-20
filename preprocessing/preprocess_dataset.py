@@ -2,27 +2,11 @@ from pathlib import Path
 import cv2
 import numpy as np
 import glob
+from utils import load_image, save_image
 from preprocessing.letterbox import letterbox
 from preprocessing.xml_utils import resize_xml_labels, xml_to_txt
 
 ########################################################################################################################
-
-def load_image(path):
-    """
-    Carga una imagen desde el disco y la convierte de BGR a RGB.
-
-    Parámetros:
-        path (str): Ruta del archivo de imagen.
-
-    Retorna:
-        img (np.ndarray): Imagen en formato RGB.
-    """
-    img = cv2.imread(path)
-    if img is None:
-        raise FileNotFoundError(f"No se pudo cargar la imagen en la ruta: {path}")
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    return img
-
 
 def preprocess_cv(input_path, output_path, new_size):
     """
@@ -43,7 +27,7 @@ def preprocess_cv(input_path, output_path, new_size):
         for image_file in in_image_dir.glob("*.jpg"):
             file_name = image_file.stem
             try:
-                img = load_image(str(image_file))
+                img = load_image(image_file)
             except FileNotFoundError as e:
                 print(e)
                 continue
@@ -85,7 +69,7 @@ def preprocess_dl(input_path, output_path, new_size):
         for image_file in in_image_dir.glob("*.jpg"):
             file_name = image_file.stem
             try:
-                img = load_image(str(image_file))
+                img = load_image(image_file)
             except FileNotFoundError as e:
                 print(e)
                 continue
