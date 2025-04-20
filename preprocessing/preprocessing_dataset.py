@@ -232,7 +232,7 @@ def preprocess_dl(input_path, output_path, new_size):
             original_size = (img.shape[1], img.shape[0])
 
             crop_box = None
-            img_resized, scale, (pad_x, pad_y), new_shape = letterbox(img, original_size)
+            img_resized, scale, (pad_x, pad_y) = letterbox(img, original_size)
             img_resized = cv2.cvtColor(img_resized, cv2.COLOR_RGB2BGR)
             cv2.imwrite(str(out_image_dir / image_file.name), img_resized)
             
@@ -274,13 +274,16 @@ if __name__ == "__main__":
     input_folder = "../data/raw"
     output_folder_cv = "../data/processed_cv"
     output_folder_dl = "../data/processed_dl"
-    mode = "classic_vision"
+    mode = "all"
 
     print("Comenzando preprocesamiento de datos")
     if mode == "classic_vision":
         preprocess_dataset(input_folder, output_folder_cv, mode)
     elif mode == "deep_learning":
         preprocess_dataset(input_folder, output_folder_dl, mode)
+    elif mode == "all":
+        preprocess_dataset(input_folder, output_folder_cv, "classic_vision")
+        preprocess_dataset(input_folder, output_folder_cv, "deep_learning")
     else:
         raise ValueError(f"Modo '{mode}' no reconocido")
     print("Preprocesado de datos finalizado")
