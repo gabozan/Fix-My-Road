@@ -17,6 +17,8 @@ def load_image(path):
         img (np.ndarray): Imagen en formato RGB.
     """
     img = cv2.imread(path)
+    if img is None:
+        raise FileNotFoundError(f"No se pudo cargar la imagen en la ruta: {path}")
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     return img
 
@@ -52,15 +54,15 @@ def resize_xml_labels(in_xml_path, new_size, original_size, crop_box):
     for obj in root.findall("object"):
         bb = obj.find("bndbox")
         # x -------------------------------------------------------------
-        xmin = int(bb.find("xmin").text) - crop_x
-        xmax = int(bb.find("xmax").text) - crop_x
+        xmin = int(float(bb.find("xmin").text)) - crop_x
+        xmax = int(float(bb.find("xmax").text)) - crop_x
         xmin = max(0, min(xmin, crop_w))
         xmax = max(0, min(xmax, crop_w))
         bb.find("xmin").text = str(int(xmin * sx))
         bb.find("xmax").text = str(int(xmax * sx))
         # y -------------------------------------------------------------
-        ymin = int(bb.find("ymin").text) - crop_y
-        ymax = int(bb.find("ymax").text) - crop_y
+        ymin = int(float(bb.find("ymin").text)) - crop_y
+        ymax = int(float(bb.find("ymax").text)) - crop_y
         ymin = max(0, min(ymin, crop_h))
         ymax = max(0, min(ymax, crop_h))
         bb.find("ymin").text = str(int(ymin * sy))
@@ -123,7 +125,11 @@ def preprocess_cv(input_path, output_path, new_size):
 
         for image_file in in_image_dir.glob("*.jpg"):
             file_name = image_file.stem
-            img = load_image(str(image_file))
+            try:
+                img = load_image(str(image_file))
+            except FileNotFoundError as e:
+                print(e)
+                continue
             original_size = (img.shape[1], img.shape[0])
 
             crop_box = None
