@@ -39,8 +39,7 @@ def preprocess_cv(input_path, output_path, new_size):
                 crop_box = (0, 0, crop_w, original_size[1])
                 img = img[:, :crop_w]
             img_resized = cv2.resize(img, new_size, interpolation=cv2.INTER_AREA)
-            img_resized = cv2.cvtColor(img_resized, cv2.COLOR_RGB2BGR)
-            cv2.imwrite(str(out_image_dir / image_file.name), img_resized)
+            save_image((out_image_dir / image_file.name), img_resized)
             
             in_label_path = input_path / "labels" / (file_name + ".xml")
             out_label_path = out_label_dir / (file_name + ".txt")
@@ -77,8 +76,7 @@ def preprocess_dl(input_path, output_path, new_size):
 
             crop_box = None
             img_resized, scale, (pad_x, pad_y) = letterbox(img, original_size)
-            img_resized = cv2.cvtColor(img_resized, cv2.COLOR_RGB2BGR)
-            cv2.imwrite(str(out_image_dir / image_file.name), img_resized)
+            save_image((out_image_dir / image_file.name), img_resized)
             
             in_label_path = input_path / "labels" / (file_name + ".xml")
             out_label_path = out_label_dir / (file_name + ".txt")
