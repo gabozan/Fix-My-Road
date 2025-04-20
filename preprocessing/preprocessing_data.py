@@ -1,5 +1,7 @@
 from pathlib import Path
 import xml.etree.ElementTree as ET
+from statistics import mode
+
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
@@ -122,6 +124,9 @@ def preprocess_cv(input_path, output_path, new_size):
     for split in ["train", "test"]:
         in_image_dir = input_path / split
         out_image_dir = output_path / split
+        out_label_dir = output_path / "labels"
+        out_image_dir.mkdir(parents=True, exist_ok=True)
+        out_label_dir.mkdir(parents=True, exist_ok=True)
 
         for image_file in in_image_dir.glob("*.jpg"):
             file_name = image_file.stem
@@ -142,7 +147,7 @@ def preprocess_cv(input_path, output_path, new_size):
             cv2.imwrite(str(out_image_dir / image_file.name), img_resized)
             
             in_label_path = input_path / "labels" / (file_name + ".xml")
-            out_label_path = output_path / "labels" / (file_name + ".txt")
+            out_label_path = out_label_dir / (file_name + ".txt")
 
             if in_label_path.exists():
                 tree = resize_xml_labels(in_label_path, new_size, original_size, crop_box)
@@ -191,14 +196,23 @@ def preprocess_dataset(input_folder, output_folder, mode="classic_vision", new_s
     else:
         raise ValueError(f"Modo '{mode}' no reconocido")
 
-
-
-
+########################################################################################################################
+#                                                                                                                      #
+#                                     FLUJO PRINCIPAL DE PREPROCESAMIENTO DE DATOS                                     #
+#                                                                                                                      #
+########################################################################################################################
 
 if __name__ == "__main__":
-    input_folder_cv = "../data/raw"
+    input_folder = "../data/raw"
     output_folder_cv = "../data/processed_cv"
+    output_folder_dl = "../data/processed_dl"
+    mode = "classic_vision"
 
-    print("😏 Comenzando preprocesamiento de datos 😏")
-    preprocess_dataset(input_folder_cv, output_folder_cv, "classic_vision")
-    print("😎 Preprocesado de datos finalizado 😎")
+    print("Comenzando preprocesamiento de datos")
+    if mode == "classic_vision":
+        preprocess_dataset(input_folder, output_folder_cv, mode)
+    elif mode == "deep_learning":
+        preprocess_dataset(input_folder, output_folder_dl, mode)
+    else:
+        raise ValueError(f"Modo '{mode}' no reconocido")
+    print("Preprocesado de datos finalizado")
