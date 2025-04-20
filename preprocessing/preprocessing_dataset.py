@@ -231,6 +231,7 @@ def preprocess_dl(input_path, output_path, new_size):
                 continue
             original_size = (img.shape[1], img.shape[0])
 
+            crop_box = None
             img_resized, scale, (pad_x, pad_y), new_shape = letterbox(img, original_size)
             img_resized = cv2.cvtColor(img_resized, cv2.COLOR_RGB2BGR)
             cv2.imwrite(str(out_image_dir / image_file.name), img_resized)
