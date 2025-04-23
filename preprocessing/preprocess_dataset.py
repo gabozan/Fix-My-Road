@@ -96,13 +96,14 @@ def preprocess_dataset(input_folder, output_folder, mode="classic_vision", new_s
         mode (str): Tipo de preprocesamiento. Puede ser "classic_vision" o "deep_learning".
         new_size (tuple): Tamaño al que se redimensionarán las imágenes (ancho, alto).
     """
-    input_path = Path(input_folder)
-    output_path = Path(output_folder)
+    input_dir = Path(input_folder)
+    output_dir = Path(output_folder)
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     if mode == "classic_vision":
-        preprocess_cv(input_path, output_path, new_size)
+        preprocess_cv(input_dir, output_dir, new_size)
     elif mode == "deep_learning":
-        preprocess_dl(input_path, output_path, new_size)
+        preprocess_dl(input_dir, output_dir, new_size)
     else:
         raise ValueError(f"Modo '{mode}' no reconocido")
 
