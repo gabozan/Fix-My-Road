@@ -1,0 +1,6 @@
+train: ../data/processed_dl/train
+val: ../data/processed_dl/validation
+test: ../data/processed_dl/test
+
+nc: 4
+names: ['bache']

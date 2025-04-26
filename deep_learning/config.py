@@ -1,15 +1,12 @@
-# Ruta al modelo preentrenado
-MODEL_PATH = "../models/yolov8n.pt"
+# config.py
 
-# Rutas al dataset
+MODELS = {
+    "nano": "yolov8n.pt",
+    "small": "yolov8s.pt"
+}
+
 DATA_YAML = "../data/processed_dl/data.yaml"
-
-# Tamaño de imagen
 IMG_SIZE = 512
-
-# Número de clases
-NUM_CLASSES = 1  # por ejemplo, imperfecciones
-
-# Hiperparámetros de entrenamiento
 EPOCHS = 50
 BATCH_SIZE = 16
+CONF_THRES = 0.25
