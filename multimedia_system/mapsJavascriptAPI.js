@@ -215,19 +215,27 @@ function initMap() {
     document.getElementById('google-map'),mapOptions
   );
 
-  //De la bd recibimos el tipo de daño de la grieta. De ahí se escoge el icono adecuado
-  //fehMarker por el momento es la variable que guarda la dirección de la imagen del icono.
-  const fehMarker = "../../assets/señal_bache.png";
+  const legend = document.createElement('div');
+  legend.id = 'legend';
+  legend.innerHTML = `
+    <ul>
+      <li><img src="../../assets/señal_bache.png" alt="">Bache</li>
+      <li><img src="../../assets/señal_cocodrilo.png" alt="">Grieta</li>
+      <li><img src="../../assets/señal_grieta_longitudinal.png" alt="">Grieta longitudinal</li>
+      <li><img src="../../assets/señal_grieta_transversal.png" alt="">Grieta transversal</li>
+    </ul>
+  `;
+  google.maps.event.addListenerOnce(map, 'idle', function() {
+    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
+  });
 
-  //De la bd recibimos la imagen del daño. 
-  //infoWindow mostrará la imagen además de otra información como la dirección de la grieta.
+
+  const fehMarker = "../../assets/señal_bache.png";
   const infoWindow = new google.maps.InfoWindow({
     minWidth: 200,
     maxWidth: 200
   });
-
   const bounds = new google.maps.LatLngBounds();
-
   for(let i = 0; i < markers.length; i++) {
     const marker = new google.maps.Marker({
       position: { lat: markers[i]['lat'], lng: markers[i]['lng'] },
@@ -239,11 +247,10 @@ function initMap() {
     });
     const content = `
       <div class="feh-content">
+        <h2></h2>
       </div>
     `;
-
     function createInfoWindow(){
-      const infoWindowContent = content;
       google.maps.event.addListener(marker, 'click', function(){
         infoWindow.setContent(content);
         infoWindow.open(map, marker);

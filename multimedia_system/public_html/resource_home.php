@@ -21,15 +21,6 @@
 
   <h1>🌍 Mapa Interactivo</h1>
 
-  <div id="legend">
-    <ul>
-      <li><img src="../../assets/señal_bache.png" alt="">Bache</li>
-      <li><img src="../../assets/señal_cocodrilo.png" alt="">Grieta</li>
-      <li><img src="../../assets/señal_grieta_longitudinal.png" alt="">Grieta longitudinal</li>
-      <li><img src="../../assets/señal_grieta_transversal.png" alt="">Grieta transversal</li>
-    </ul> 
-  </div>
-
   <div id="google-map"></div>
   <script src="../mapsJavascriptAPI.js" defer></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4YMWh8KpycM8gmFRuhIqhxP7uN8Wwj1Y&callback=initMap" defer></script>
