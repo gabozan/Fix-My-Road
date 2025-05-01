@@ -76,7 +76,7 @@ def train_and_validate(fliplr, hsv_h, hsv_s, hsv_v, scale, batch_size, epochs, r
 
 
 if __name__ == "__main__":
-    n_trials = 12
+    n_trials = 8
     random.seed(24)
     for i in range(n_trials):
         fl = random.choice(FLIP_LR_VALUES)
