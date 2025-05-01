@@ -1,6 +1,6 @@
-train: C:/Users/riosr/Desktop/FixMyRoad/data/processed_dl/images/train
-val: C:/Users/riosr/Desktop/FixMyRoad/data/processed_dl/images/val
-test: C:/Users/riosr/Desktop/FixMyRoad/data/processed_dl/test
+train: C:/Users/riosr/Desktop/Fix-My-Road/data/processed_dl/images/train
+val: C:/Users/riosr/Desktop/Fix-My-Road/data/processed_dl/images/val
+test: C:/Users/riosr/Desktop/Fix-My-Road/data/processed_dl/test
 
 nc: 4
 names: ["D00", "D10", "D20", "D40"]

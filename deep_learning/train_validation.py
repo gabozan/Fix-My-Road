@@ -2,8 +2,7 @@ from ultralytics import YOLO
 from deep_learning.config import MODEL, DATA_YAML, IMG_SIZE, DEVICE, PROJECT
 from pathlib import Path
 import json
-from itertools import product
-from datetime import datetime
+import random
 
 ########################################################################################################################
 
@@ -14,6 +13,8 @@ HSV_V_VALUES   = [0.3,  0.4]
 SCALE_VALUES   = [0.3,  0.5]
 BATCH_SIZES    = [8, 16]
 EPOCHS_VALUES  = [30, 50]
+
+########################################################################################################################
 
 def train_and_validate(fliplr, hsv_h, hsv_s, hsv_v, scale, batch_size, epochs, run_id):
     """
@@ -37,7 +38,10 @@ def train_and_validate(fliplr, hsv_h, hsv_s, hsv_v, scale, batch_size, epochs, r
         hsv_h=hsv_h,
         hsv_s=hsv_s,
         hsv_v=hsv_v,
-        scale=scale
+        scale=scale,
+        cache = True,
+        workers = 8,
+        half = True
     )
 
     print("Entrenamiento finalizado.")
@@ -54,7 +58,6 @@ def train_and_validate(fliplr, hsv_h, hsv_s, hsv_v, scale, batch_size, epochs, r
     results_path.parent.mkdir(parents=True, exist_ok=True)
     with open(results_path, "w") as f:
         json.dump({
-            "timestamp":  datetime.now().isoformat(timespec="seconds"),
             "mAP@0.5":    mAP50,
             "mAP@0.5:0.95": mAP5095,
             "f1_score":   f1,
@@ -65,7 +68,6 @@ def train_and_validate(fliplr, hsv_h, hsv_s, hsv_v, scale, batch_size, epochs, r
             "scale":      scale,
             "batch_size": batch_size,
             "epochs":     epochs,
-            "patience":   patience,
             "weights":    str(Path(PROJECT) / experiment_name / "weights" / "best.pt")
         }, f, indent=4)
     print(f"Métricas guardadas en {results_path}\n")
@@ -73,19 +75,15 @@ def train_and_validate(fliplr, hsv_h, hsv_s, hsv_v, scale, batch_size, epochs, r
 
 
 if __name__ == "__main__":
-
-    grid = list(product(
-        FLIP_LR_VALUES,
-        HSV_H_VALUES,
-        HSV_S_VALUES,
-        HSV_V_VALUES,
-        SCALE_VALUES,
-        BATCH_SIZES,
-        EPOCHS_VALUES
-    ))
-
-    for i, (fl, hh, hs, hv, sc, bs, ep) in enumerate(grid):
-        run_id = (f"{i:03d}_f{fl}_hh{hh}_hs{hs}_hv{hv}"
-                  f"_sc{sc}_b{bs}_e{ep}")
-        train_and_validate(fliplr=fl, hsv_h=hh, hsv_s=hs, hsv_v=hv, scale=sc, batch_size=bs, epochs=ep,
-                           run_id=run_id, patience=50)
+    n_trials = 12
+    random.seed(24)
+    for i in range(n_trials):
+        fl = random.choice(FLIP_LR_VALUES)
+        hh = random.choice(HSV_H_VALUES)
+        hs = random.choice(HSV_S_VALUES)
+        hv = random.choice(HSV_V_VALUES)
+        sc = random.choice(SCALE_VALUES)
+        bs = random.choice(BATCH_SIZES)
+        ep = random.choice(EPOCHS_VALUES)
+        run_id = f"{i:03d}_f{fl}_hh{hh}_hs{hs}_hv{hv}_sc{sc}_b{bs}_e{ep}"
+        train_and_validate(fliplr=fl, hsv_h=hh, hsv_s=hs, hsv_v=hv, scale=sc, batch_size=bs, epochs=ep, run_id=run_id)
