@@ -2,3 +2,5 @@ data/
 .idea/
 **/__pycache__/
 ._*
+deep_learning/yolo11n.pt
+deep_learning/yolov8s.pt

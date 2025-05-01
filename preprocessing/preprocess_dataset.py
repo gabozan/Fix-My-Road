@@ -114,10 +114,10 @@ def preprocess_dataset(input_folder, output_folder, mode="classic_vision", new_s
 ########################################################################################################################
 
 if __name__ == "__main__":
-    input_folder = "../data/raw_reduced"
+    input_folder = "../data/raw"
     output_folder_cv = "../data/processed_cv"
     output_folder_dl = "../data/processed_dl"
-    mode = "classic_vision"
+    mode = "deep_learning"
 
     print("Comenzando preprocesamiento de datos")
     if mode == "classic_vision":

@@ -68,7 +68,7 @@ def resize_xml_labels(in_xml_path, new_size, original_size, crop_box, mode="clas
 def xml_to_txt(tree, out_label_path, img_size, mode="classic_vision"):
     """
     Convierte un árbol XML a un archivo txt compatible con visión
-    clásica o con YOLO (deep learning).
+    clásica o con YOLO (deep learning), filtrando solo D00, D10, D20, D40.
 
     Parámetros:
         tree (ElementTree): Árbol XML.
@@ -77,12 +77,22 @@ def xml_to_txt(tree, out_label_path, img_size, mode="classic_vision"):
                     'deep learning' para formato YOLO normalizado.
         img_size (tuple): Tamaño de la imagen final (ancho, alto).
     """
+    CLASS_MAPPING = {
+        'D00': 0,
+        'D10': 1,
+        'D20': 2,
+        'D40': 3
+    }
+
     root = tree.getroot()
     w, h = img_size
     lines = []
 
     for obj in root.findall("object"):
         name = obj.find("name").text
+        if name not in CLASS_MAPPING:
+            continue
+        class_id = CLASS_MAPPING[name]
         bndbox = obj.find("bndbox")
         xmin = int(bndbox.find("xmin").text)
         xmax = int(bndbox.find("xmax").text)
@@ -90,13 +100,13 @@ def xml_to_txt(tree, out_label_path, img_size, mode="classic_vision"):
         ymax = int(bndbox.find("ymax").text)
 
         if mode == "classic_vision":
-            lines.append(f"{name} {xmin} {ymin} {xmax} {ymax}")
+            lines.append(f"{class_id} {xmin} {ymin} {xmax} {ymax}")
         elif mode == "deep_learning":
             x_center = (xmin + xmax) / 2 / w
             y_center = (ymin + ymax) / 2 / h
             width    = (xmax - xmin) / w
             height   = (ymax - ymin) / h
-            lines.append(f"{name} {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f}")
+            lines.append(f"{class_id} {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f}")
         else:
             raise ValueError(f"Modo '{mode}' no reconocido")
 
