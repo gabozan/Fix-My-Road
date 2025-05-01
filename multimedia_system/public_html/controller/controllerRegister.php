@@ -4,11 +4,16 @@ $errors = [];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     require_once __DIR__ . "/../model/connectDB.php";
-    require_once __DIR__ . "/../model/m_login.php";
+    require_once __DIR__ . "/../model/m_register.php";
     
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $name = $_POST['name']; 
+    $email = $_POST['email']; 
+    $password = $_POST['password']; 
     
+    if (empty($name)) {
+        $errors[] = "El campo 'Nombre' es obligatorio.";
+    }
+
     if (empty($email)) {
         $errors[] = "El campo 'Correo electrónico' no puede estar vacío.";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -18,21 +23,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (empty($password)) {
         $errors[] = "El campo 'Contraseña' es obligatorio.";
     }
-
+    
     if (empty($errors)) {
         $connection = connectDB();
-        $user = loginUser($email, $connection);
+        $result = registerUser($name, $email, $password, $connection);
         
-        if ($user && password_verify($password, $user["password"])) {
-            $_SESSION["id_user"] = $user["id_user"];
-            $_SESSION["user_email"] = $user["email"];
+        if ($result) {
             header("Location: index.php");
             exit();
         } else {
-            $errors[] = "Correo electrónico o contraseña incorrectos.";
+            $errors[] = "Hubo un problema al registrar al usuario. Inténtalo de nuevo.";
         }
     }
 }
-require __DIR__ . "/../view/printLogin.php";
+require __DIR__ . "/../view/printRegister.php";
 
 ?>
