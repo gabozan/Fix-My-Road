@@ -23,10 +23,9 @@ def train_and_validate(fliplr, hsv_h, hsv_s, hsv_v, scale, batch_size, epochs, r
     experiment_name = f"grid_{run_id}"
     print(f"\nEntrenando experimento: {experiment_name}")
 
-    model = YOLO(MODEL, seed=24)
+    model = YOLO(MODEL)
 
     model.train(
-        seed=24,
         data=DATA_YAML,
         imgsz=IMG_SIZE,
         epochs=epochs,
