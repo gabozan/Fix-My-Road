@@ -7,8 +7,6 @@
   <link rel="icon" href="./assets/imgs/logo_Fix-my-road.png">
   <link rel="stylesheet" href="assets/css/global.css">
   <link rel="stylesheet" href="assets/css/home.css">
-  <link rel="stylesheet" href="assets/css/legend.css">
-  <link rel="stylesheet" href="assets/css/info-box.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="/assets/js/userAction.js"></script>
 </head>

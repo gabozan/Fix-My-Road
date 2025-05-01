@@ -5,9 +5,6 @@ error_reporting(E_ALL);
 
 session_start();
 
-$filesAbsolutePath = 'C:\xampp\htdocs\Fix-My-Road\multimedia_system\public_html\uploadedFiles';
-$filesPublicPath = '\uploadedFiles';
-
 $action = $_GET['action'] ?? NULL;
 
 switch ($action) {

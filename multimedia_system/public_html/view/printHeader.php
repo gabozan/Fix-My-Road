@@ -1,13 +1,13 @@
 <header>
     <div id="header-container">
         <div class="logo">
-            <a href="">
+            <a href="index.php">
                 <img src="./assets/imgs/logo_Fix-my-road_banner_no_background.png" alt="Fix-my-road Logo">
             </a>
         </div>
 
         <div class="home-button">
-            <a href="">Inicio</a>
+            <a href="">Top</a>
         </div>
         
         <div class="user-actions">
