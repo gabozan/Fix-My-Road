@@ -10,16 +10,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require_once __DIR__ . "/../model/checkUpdateUserInfo.php";
 
     $userId = $_SESSION['id_user'];
-    $name = $_POST['name'];
-    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $confirmPassword = $_POST['confirm_password'];
 
-    $connection = connectDB();
-    $result = updateUser($connection, $userId, $email, $name);
+    if ($password === $confirmPassword) {
+        $connection = connectDB();
+        $result = updatePassword($connection, $userId, $password);
 
-    if ($result) {
-        $_SESSION["user_email"] = $email;
-        header("Location: index.php?action=resource-myAccount");
-        exit();
+        if ($result) {
+            header("Location: index.php?action=resource-myAccount&success=password");
+            exit();
+        }
     }
 }
 

@@ -19,6 +19,9 @@ switch ($action) {
         break;
     case 'update-user-info':
         require __DIR__ . '/controller/controllerUpdateUserInfo.php';
+        break;        
+    case 'update-pass-info':
+        require __DIR__ . '/controller/controllerUpdatePassInfo.php';
         break;
     case 'resource-myAccount':
         require __DIR__ . '/resource_myAccount.php';
