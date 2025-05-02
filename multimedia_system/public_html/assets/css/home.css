@@ -1,10 +1,17 @@
+.map-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
 #google-map {
     width: 85vw;             /* Ocupa casi todo el ancho visible */
     height: 70vh;            /* Ocupa el 80% de la altura de la pantalla */
     margin: 30px auto;
     padding: 8px;
     background-color: white;
-    border: 2px solid #3b82f6;
+    border: 2px solid #84c7bf;
     border-radius: 16px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
@@ -19,7 +26,7 @@
   right: 8px;
   background: #ffffff;
   border-style: solid;
-  border-color: #1e6ee8 transparent transparent #1e6ee8;
+  border-color: #84c7bf transparent transparent #84c7bf;
   border-width: 2px 0 0 2px;
   border-radius: 10px 0 0 0;
   padding: 14px 20px;
@@ -36,7 +43,7 @@
   margin: 0 0 12px;
   font-size: 17px;
   font-weight: 600;
-  color: #1e3a8a;
+  color: #316275;
 }
 
 #legend ul {
@@ -58,4 +65,28 @@
   width: 29px;
   height: 29px;
   flex-shrink: 0;
+}
+
+#map-info {
+  background: #f0f8ff;
+  padding: 1.5em;
+  border-radius: 8px;
+  margin: 2em auto;
+  max-width: 800px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+#map-info p {
+  margin-bottom: 1em;
+}
+
+#map-info ul {
+  padding-left: 1.2em;
+  list-style: disc;
+  margin-bottom: 1em;
+}
+
+#map-info li {
+  margin-bottom: 0.5em;
 }
