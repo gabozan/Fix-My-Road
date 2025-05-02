@@ -13,4 +13,16 @@ function updatePassword($connection, $userId, $password) {
     return pg_query_params($connection, $sql, $params);
 }
 
+function isUsernameTakenByOtherUser($connection, $username, $currentUserId) {
+    $sql = 'SELECT 1 FROM "user" WHERE name = $1 AND id_user != $2';
+    $result = pg_query_params($connection, $sql, [$username, $currentUserId]);
+    return pg_num_rows($result) > 0;
+}
+
+function isEmailTakenByOtherUser($connection, $email, $userId) {
+    $sql = 'SELECT 1 FROM "user" WHERE email = $1 AND id_user != $2';
+    $result = pg_query_params($connection, $sql, [$email, $userId]);
+    return pg_num_rows($result) > 0;
+}
+
 ?>

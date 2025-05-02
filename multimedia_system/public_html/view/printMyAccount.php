@@ -1,3 +1,18 @@
+<?php
+$errors = $_SESSION['update_user_errors'] ?? [];
+$oldValues = $_SESSION['update_user_old'] ?? [];
+unset($_SESSION['update_user_errors'], $_SESSION['update_user_old']);
+?>
+
+<?php if (!empty($errors)): ?>
+    <div id="error-messages">
+        <ul>
+            <?php foreach ($errors as $error): ?>
+                <li><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+<?php endif; ?>
 <div id="account-container">
     <div id="form-container">
         <form action="index.php?action=update-user-info" method="post" enctype="multipart/form-data">
