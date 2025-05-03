@@ -47,64 +47,67 @@ header {
     transform: scale(1.05);
 }
 
-/* Botón de inicio */
-.home-button {
-    border: none;
-    padding: 10px 20px;
-    margin: 0px 10px; 
-    background-color: #60a5fa; /* azul suave */
-    color: white;
-    border-radius: 12px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.25);
-    cursor: pointer;
-}
-
-.home-button:hover {
-    background-color: #3182ce; /* azul un poco más claro */
-    transform: scale(1.05);
-}
-
-.home-button a {
-    text-decoration: none;
-    color: inherit;
-}
-
-/* ----------User actions---------- */
-.user-actions {
+.dropdowns-tuple {
     display: flex;
     flex-direction: row;
-    margin: 0px 10px; 
+    align-items: center;
+    justify-content: center;
 }
 
-.user-actions img {
+/* ----------Contenedor de ambos dropdowns---------- */
+.dropdowns-tuple {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dropdown > a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.dropdown > a img {
     width: 50px;
     height: auto;
-    cursor: pointer;
     filter: brightness(0.8);
 }
 
-.user-actions img:hover {
+/* Hover para ambos */
+.dropdown > a:hover,
+.dropdown > a img:hover {
     transform: scale(1.05);
 }
 
-/* ----------Dropdown---------- */
-.dropdown {
-    position: relative;
-}
-
 .dropdown-menu {
-    display: none;
     position: absolute;
-    top: 100%;
+    top: 100%; /* directamente debajo del botón */
     left: 50%;
     transform: translateX(-50%);
-    background-color: #2d3748; /* gris oscuro */
-    border: 1px solid #4a5568; /* gris neutro */
+    background-color: #2d3748;
+    border: 1px solid #4a5568;
     border-radius: 12px;
     list-style: none;
     z-index: 1000;
-    min-width: 140px;
+    min-width: 180px;
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+    display: none;
 }
 
 .dropdown:hover .dropdown-menu {
@@ -118,20 +121,18 @@ header {
 
 .dropdown-menu li a {
     text-decoration: none;
-    color: #60a5fa; /* azul suave */
+    color: #60a5fa;
     display: block;
+    font-weight: 500;
+    transition: all 0.2s;
 }
 
 .dropdown-menu li a:hover {
-    background-color: #4a5568; /* gris neutro */
+    background-color: #4a5568;
+    border-radius: 15px;
     transform: scale(1.03);
 }
 
-/* ----------Login button---------- */
-#login-btn {
-    display: block;
-    cursor: pointer;
-}
 
 /* ----------Main---------- */
 main {

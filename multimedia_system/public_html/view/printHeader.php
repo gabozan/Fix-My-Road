@@ -6,25 +6,34 @@
             </a>
         </div>
 
-        <div class="home-button">
-            <a href="index.php?action=resource-ranking">Ranking</a>
-        </div>
-        
-        <div class="user-actions">
-            <div class="dropdown">
-                <a id="login-btn">
-                    <img src="./assets/imgs/user-icon-white.png" alt="Inicio de Sesión" width="100px">
-                </a>
-                <ul class="dropdown-menu" id="user-menu">
-                    <?php if ($isLoggedIn): ?>
-                        <li><a href="index.php?action=resource-myAccount">Mi cuenta</a></li>
-                        <li><a href="index.php?action=logout">Cerrar sesión</a></li>
-                    <?php else: ?>
-                        <li><a href="index.php?action=resource-login">Iniciar sesión</a></li>
-                    <?php endif; ?>
-                </ul>
+        <div class="dropdowns-tuple">
+            <div class="options-actions">
+                <div class="dropdown">
+                    <a id="options-btn">Opciones</a>
+                    <ul class="dropdown-menu" id="options-menu">
+                        <li><a href="index.php?action=resource-ranking">Ranking</a></li>
+                        <li><a href="index.php?action=resource-realtime">Detección en tiempo real</a></li>
+                        <li><a href="index.php?action=resource-video">Detección de video</a></li>
+                        <li><a href="index.php?action=resource-image">Detección de imagen</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="user-actions">
+                <div class="dropdown">
+                    <a id="login-btn">
+                        <img src="./assets/imgs/user-icon-white.png" alt="Inicio de Sesión" width="100px">
+                    </a>
+                    <ul class="dropdown-menu" id="user-menu">
+                        <?php if ($isLoggedIn): ?>
+                            <li><a href="index.php?action=resource-myAccount">Mi cuenta</a></li>
+                            <li><a href="index.php?action=logout">Cerrar sesión</a></li>
+                        <?php else: ?>
+                            <li><a href="index.php?action=resource-login">Iniciar sesión</a></li>
+                        <?php endif; ?>
+                    </ul>
+                </div>
             </div>
         </div>
-
     </div>
 </header>
