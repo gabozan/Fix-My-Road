@@ -1,7 +1,6 @@
 <div class="ranking-container">
-    <h1 class="ranking-title">RANKING</h1>
-
     <div class="ranking-wrapper">
+        <h1>Ranking</h1>
         <div class="ranking-list">
             <?php foreach ($topRanking as $index => $user): ?>
                 <div class="ranking-entry">

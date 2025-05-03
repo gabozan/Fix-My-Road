@@ -15,9 +15,9 @@ unset($_SESSION['update_user_errors'], $_SESSION['update_user_old']);
 <?php endif; ?>
 <div id="account-container">
     <div id="form-container">
+        <h2>Información de Cuenta</h2>
         <form action="index.php?action=update-user-info" method="post" enctype="multipart/form-data">
-            <h2>Editar Información de Cuenta</h2>
-            <h3>Información de Cuenta</h3>
+            <h3>Editar Información</h3>
             <div class="input-container">
                 <label for="name">Nombre de Usuario</label> <br>
                 <input type="text" name="name" value="<?php echo htmlentities($userData['name'], ENT_QUOTES | ENT_HTML5, 'UTF-8'); ?>" required pattern="[A-Za-zÀ-ÿ\s]{1,}" title="Solo se permiten letras y espacios.">
