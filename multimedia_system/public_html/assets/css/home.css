@@ -31,7 +31,7 @@
   position: absolute;
   bottom: 8px;
   right: 8px;
-  background: white; /* Gris oscuro */
+  background: white;
   border-style: solid;
   border-color: #4a5568 transparent transparent #4a5568; /* Gris neutro */
   border-width: 2px 0 0 2px;

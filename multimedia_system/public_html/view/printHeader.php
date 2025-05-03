@@ -7,7 +7,7 @@
         </div>
 
         <div class="home-button">
-            <a href="">Top</a>
+            <a href="index.php?action=resource-ranking">Ranking</a>
         </div>
         
         <div class="user-actions">

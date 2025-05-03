@@ -38,7 +38,7 @@ header {
 }
 
 .logo img {
-    height: 120px;
+    height: 60px;
     width: auto;  
     transition: transform 0.3s ease;
 }
@@ -141,8 +141,8 @@ main {
     align-items: center;
     flex: 1;
     background-color: #2d3748;
-    padding: 75px;
-    margin-top: 125px;
+    padding: 10;
+    margin-top: 80px;
 }
 
 /* ----------Footer---------- */
@@ -153,9 +153,16 @@ footer {
 
 #footer-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     padding: 50px;
     flex-wrap: wrap;
+}
+
+.footer-section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .footer-section h4 {
