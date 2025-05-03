@@ -5,7 +5,6 @@
             <ul>
                 <li>Quiénes somos</li>
                 <li>Trabaja con nosotros</li>
-                <li>Blog</li>
             </ul>
         </div>
 
@@ -14,7 +13,6 @@
             <ul>
                 <li>Centro de ayuda</li>
                 <li>Preguntas frecuentes</li>
-                <li>Envíos</li>
             </ul>
         </div>
 

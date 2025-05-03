@@ -12,37 +12,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userId = $_SESSION['id_user'];
     $name = $_POST['name'];
     $email = $_POST['email'];
-    $password = $_POST['password'];
-    $confirmPassword = $_POST['confirm_password'];
+    $errors = [];
 
-    if ($password == $confirmPassword) {
-        if (isset($_FILES['profile_picture']) && !empty($_FILES['profile_picture'])) {
-            if ($_FILES['profile_picture']['name'] !== 'default_profile_picture.png') {
-                $baseName = pathinfo($_FILES['profile_picture']['name'], PATHINFO_FILENAME);
-                $cleanBaseName = preg_replace('/[^a-zA-Z0-9-_]/', '', $baseName);
-                $fileExtension = pathinfo($_FILES['profile_picture']['name'], PATHINFO_EXTENSION);
-                $uniqueFileName = $cleanBaseName . "_user_" . $userId . "." . $fileExtension;
-                $destinationPath = $filesAbsolutePath . $uniqueFileName;
-                move_uploaded_file($_FILES['profile_picture']['tmp_name'], $destinationPath);
-            } else {
-                $uniqueFileName = NULL;
-            }
-        } else {
-            $uniqueFileName = NULL;
-        }
+    $connection = connectDB();
 
-        $connection = connectDB();
-        $result = updateUser($connection, $userId, $email, $password, $name, $uniqueFileName);
+    if (isUsernameTakenByOtherUser($connection, $name, $userId)) {
+        $errors[] = "El nombre de usuario ya está en uso.";
+    }
+
+    if (isEmailTakenByOtherUser($connection, $email, $userId)) {
+        $errors[] = "El correo electrónico ya está en uso.";
+    }
+
+    if (empty($errors)) {
+        $result = updateUser($connection, $userId, $email, $name);
 
         if ($result) {
             $_SESSION["user_email"] = $email;
-            header("Location: index.php");
+            header("Location: index.php?action=resource-myAccount");
             exit();
+        } else {
+            $errors[] = "Hubo un problema al actualizar la información.";
         }
     }
+
+    $_SESSION['update_user_errors'] = $errors;
+    $_SESSION['update_user_old'] = [
+        'name' => $name,
+        'email' => $email,
+    ];
+    header("Location: index.php?action=resource-myAccount");
+    exit();
 }
-
-header("Location: index.php?action=resource-myAccount");
-exit();
-
-?>
