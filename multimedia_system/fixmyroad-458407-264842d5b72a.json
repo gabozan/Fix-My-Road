@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "fixmyroad-458407",
+  "private_key_id": "264842d5b72a493ceb9276d6924df9b49ff6120b",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDR3wzrtZ9ZnaK8\nnr3YuOXJ1OkVzQQlr0IjNEED4TfoUEnuJt1Z1p3HKIIx7tvVWQ4T7W/GUt8rmTzs\ngTdh7OTfjBUkbF5nhZqCkAwWNV3TS6EhtnlO6fV78ur/SdQpaLWFoz5DkEUJbCeA\n5bparm90J7CBXtXWfhi5uFJY37suI71I0HdG8iw+YF+AUh3dMtK6e0KHYwZbzIfX\np/yIDuWiC56omQNdsB6rPxz/GkZjBrNdDcjWa1hjtrJSMM1DAqh5YBni4SBjjNVm\nC0OBViXPZO4w6s3p713H9pf/iVMcXWKdLZPxAkSYwYnekBYnkFmWu+MRYWmEMEeZ\nseGbWclrAgMBAAECggEAFIhnNLZtE9ugJ3u7ujTYx9GB87qTpyDe7nUhzpXdyOeg\nsWFHCGTpbynk7FVgrPO3X2FnAqG//ignYEIsyh1fBQn+VYpusAp6Y+oLl1lQR9MJ\n6DOjPwJqcd6BzvPeWHt16vsIz/EQ+AuHT+KUmWOgjt4v3sW0U8sRczYihFnF7+JX\nZi8epLRjlI+IHKvfpTH9U04RMBPpQHs1Xvp4LN48M0S32w/n31gsG6rB6mCe2FKd\nX9miJk3vZGRaSU4clxeipb4wNgY8ilAMYJZquZeDiEpJi8c/eVYiLa82DK8ZzbUh\nnHL4ddAVI0ABscKK9FtZffjTl3fJvZ+QX2UQeeXPgQKBgQD8aUj10p7nL3OW0KdX\nMh5SSONjK4xsgUcRo/LYuwPTjNL9nSnZWcTglYIMzAdF/9Zs2foGvW5FFUSKVkuU\n210f5YtgS9VkcQnMtOVG5UDIizHNu+5HrPEKtd2S4bgZaTfw5Km1ciFbY1rXnfSw\nQ8LdxKDeq/pXKRgSXjngw9s3gQKBgQDU2u4ux+w447UACto3NfU5s+bQQRO/gh6k\n99FqLWU1OXUcvqcETTwihbXQOcl7XMMW5RGrMh5kgobIxFy10ybzh//Y2bKyOt/f\n7AOymXqNYO1ZWWK9FjiJSM7C4hTrtHrQShN3nVBcN0q5PEdkNCKjkVUiQy8dDY1r\nBWr6rLjW6wKBgQDPAbnogVf42h2+LllPVbcwXL6/8lM0GcIjYYYk4Rt+QBw6Cs7r\nhofEeFk0DZBZhDxjAVHgfTMWTR7tJWDPMCjro+Huk8LqoRocXK88uX+r+RxbUilV\ndywoUIbrk1rc3EIYui/Es1lQDefOtaibdrc2EbCtbfXdzcIELmrhPz9mAQKBgEFE\n4MR3iXfoWxgoO8GySf/nql8xlVykCcGMPCrSwLYRaFfoHk6zYD01wwqWrbGmQCxF\nEaXtOGSZobrue39FwCvtCAb2ulTsuLlxJbEeXvX7QsyjHCPfLHbsXHpl2QRt0zsL\ne+yx0HJ2gfNLCJkxY23EotZew5OlFDg88RDs5cEBAoGBAMZXyY2prwm+v6+bML95\nzrg2ktA+AiDIbtIXaCBAoiDHDY1Oq3Qjt8celMPHBEiVeL9VTfxhvOys7iidjZur\nyWU3QY8UCl+uDa4XYxLUI/5ou+9qAoByMuKHUceYTl60SDctVtcLoe1pDAvLikil\nKcz8XpSt0Gd43fRsWbRDd5E6\n-----END PRIVATE KEY-----\n",
+  "client_email": "speech-service@fixmyroad-458407.iam.gserviceaccount.com",
+  "client_id": "117104465850585015217",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/speech-service%40fixmyroad-458407.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

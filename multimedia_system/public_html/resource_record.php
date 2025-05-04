@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Grabador y subida de vídeo</title>
+</head>
+<body>
+  <h1>Graba un vídeo y súbelo</h1>
+  <video id="preview" width="640" height="480" autoplay muted></video>
+  <div>
+    <button id="startBtn">Comenzar grabación</button>
+    <button id="stopBtn" disabled>Detener grabación</button>
+  </div>
+  <div id="status"></div>
+  <script src="../record/record.js"></script>
+</body>
+</html>

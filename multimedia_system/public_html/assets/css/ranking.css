@@ -1,0 +1,104 @@
+/* ----------Contenedor externo que organiza---------- */
+.ranking-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+
+}
+
+/* ----------Contenedor visual principal---------- */
+.ranking-wrapper {
+    width: 100%;
+    max-width: 700px;
+    background-color: #4a5568; /* gris neutro */
+    border-radius: 15px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+/* ----------Título del ranking---------- */
+.ranking-title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 32px;
+    color: #f7fafc;
+}
+
+/* ----------Lista de entradas del ranking---------- */
+.ranking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* ----------Una entrada individual---------- */
+.ranking-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1a202c; /* gris oscuro */
+    padding: 15px 20px;
+    border-radius: 12px;
+    border: 1px solid #2d3748;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease;
+}
+
+.ranking-entry:hover {
+    transform: scale(1.02);
+}
+
+/* ----------Posición del ranking---------- */
+.ranking-position {
+    font-size: 18px;
+    font-weight: bold;
+    color: #60a5fa; /* azul suave */
+    margin-right: 15px;
+}
+
+/* ----------Info de nombre y email---------- */
+.ranking-info {
+    flex-grow: 1;
+}
+
+.ranking-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #f7fafc; /* blanco suave */
+}
+
+.ranking-email {
+    font-size: 14px;
+    color: #cbd5e0; /* gris claro */
+}
+
+/* ----------Score---------- */
+.ranking-score {
+    font-size: 16px;
+    font-weight: bold;
+    color: #f7fafc;
+}
+
+/* ----------Bloque del usuario logueado---------- */
+.ranking-user {
+    margin-top: 0px;
+}
+
+.ranking-user h2 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #60a5fa;
+}
+
+/* ----------Estilo del usuario actual---------- */
+.highlight {
+    border: 2px solid #60a5fa;
+    background-color: #2c5282; /* azul más marcado */
+}

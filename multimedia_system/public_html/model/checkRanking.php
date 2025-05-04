@@ -1,0 +1,25 @@
+<?php
+
+function getTopRanking($connection) {
+    $sql_top = "SELECT name, email, score FROM \"user\" ORDER BY score DESC LIMIT 10";
+    $query_top = pg_query($connection, $sql_top) or die("Error al ejecutar la consulta del ranking top 10");
+    $result_top = pg_fetch_all($query_top);
+    return $result_top;
+}
+
+function getUserRanking($connection, $id_user) {
+    $sql_position = "
+      SELECT position, name, email, score FROM (
+        SELECT id_user, name, email, score,
+               ROW_NUMBER() OVER (ORDER BY score DESC) AS position
+        FROM \"user\"
+      ) AS ranked
+      WHERE id_user = $id_user
+    ";
+  
+    $query_position = pg_query($connection, $sql_position) or die("Error al ejecutar la consulta de posición del usuario");
+    $result_position = pg_fetch_assoc($query_position);
+    return $result_position;
+  }  
+
+?>

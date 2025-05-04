@@ -1,0 +1,89 @@
+/* ----------Login y Register - Contenedor principal---------- */
+#login-container, #register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 20px;
+    background-color: #2d3748; /* Gris oscuro de fondo */
+}
+
+/* ----------Formulario - Contenedor principal---------- */
+#form-container {
+    background-color: #4a5568; /* Gris neutro */
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Máxima anchura del formulario */
+}
+
+/* ----------Título del formulario (h2)---------- */
+form h2 {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #f7fafc; /* Blanco suave */
+}
+
+/* ----------Contenedor de los campos de entrada---------- */
+.input-container {
+    margin-bottom: 15px;
+}
+
+/* ----------Estilo de las etiquetas de los campos---------- */
+.input-container label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    display: inline-block;
+    color: #f7fafc; /* Blanco suave */
+}
+
+/* ----------Estilo de los campos de entrada (inputs)---------- */
+.input-container input {
+    width: 100%;
+    font-size: 16px;
+    border: 1px solid #cbd5e0; /* Gris claro */
+    border-radius: 15px;
+    padding: 10px;
+    background-color: #1a202c; /* Gris muy oscuro */
+    color: #f7fafc; /* Blanco suave */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ----------Botón de submit---------- */
+input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #60a5fa; /* Azul suave */
+    border-radius: 15px;
+    box-shadow: 0px 4px 2px rgba(0, 0, 0, 0.2);
+    border: none;
+    cursor: pointer;
+    color: #f7fafc; /* Blanco suave */
+    font-weight: bold;
+}
+
+input[type="submit"]:hover {
+    transform: scale(1.05);
+    background-color: #3182ce; /* Azul más oscuro al pasar el mouse */
+}
+
+/* ----------Estilo para los enlaces debajo de los formularios---------- */
+.registrar p, .login p {
+    margin: 10px;
+    text-align: center;
+    font-size: 14px;
+    color: #f7fafc; /* Blanco suave */
+}
+
+.registrar p a, .login p a {
+    text-decoration: none;
+    color: #60a5fa; /* Azul suave */
+    font-weight: bold;
+}
+
+.registrar p a:hover, .login p a:hover {
+    transform: scale(1.05);
+    color: #3182ce; /* Azul más oscuro */
+}
