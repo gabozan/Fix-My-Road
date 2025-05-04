@@ -1,0 +1,11 @@
+{
+    "name": "process-video-trigger",
+    "dependencies": {
+      "@google-cloud/functions-framework": "^3.4.0",
+      "node-fetch": "^2.6.7"
+    },
+    "scripts": {
+      "start": "functions-framework --target=processVideo --signature-type=cloudevent --port=8080"
+    }
+  }
+  

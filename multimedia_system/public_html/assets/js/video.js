@@ -7,45 +7,92 @@ const realtimeContainer = document.getElementById('realtime-container');
 let stream = null;
 let camaraActiva = false;
 let transmisionActiva = false;
-let procesamientoCompletado = false; // Simulación
+let procesamientoCompletado = false;
 
-// Crear contenedor para resultado justo después del contenedor de cámara
+let mediaRecorder;
+let chunks = [];
+let grabando = false;
+
 const resultadoDiv = document.createElement('div');
 resultadoDiv.id = 'resultado-procesamiento';
 resultadoDiv.classList.add('resultado-procesamiento');
-resultadoDiv.style.display = 'none'; // Inicialmente oculto
+resultadoDiv.style.display = 'none';
 realtimeContainer.insertAdjacentElement('afterend', resultadoDiv);
 
-btnCamara.addEventListener('click', () => {
+btnCamara.addEventListener('click', async () => {
   if (!camaraActiva) {
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then((s) => {
-        stream = s;
-        video.srcObject = stream;
-        camaraActiva = true;
-        btnCamara.textContent = 'Cerrar Cámara';
-        btnTransmision.disabled = false;
-        btnTerminar.disabled = false;
-      })
-      .catch(err => {
-        console.error('Error al abrir la cámara:', err);
-      });
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      video.srcObject = stream;
+      camaraActiva = true;
+      btnCamara.textContent = 'Cerrar Cámara';
+      btnTransmision.disabled = false;
+      btnTerminar.disabled = false;
+
+      mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+      mediaRecorder.ondataavailable = e => chunks.push(e.data);
+
+      // Aquí va el evento onstop correctamente definido
+      mediaRecorder.onstop = async () => {
+        grabando = false;
+        const blob = new Blob(chunks, { type: 'video/webm' });
+
+        try {
+          const resp = await fetch(
+            'https://europe-southwest1-fixmyroad-458407.cloudfunctions.net/uploadVideo',
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'video/webm' },
+              body: blob
+            }
+          );
+          const result = await resp.json();
+
+          procesamientoCompletado = resp.ok;
+          mostrarResultadoYBotonRefrescar(result);
+        } catch (err) {
+          console.error('❌ Error subiendo:', err.message);
+          procesamientoCompletado = false;
+          mostrarResultadoYBotonRefrescar();
+        }
+      };
+
+    } catch (err) {
+      console.error('Error al abrir la cámara:', err);
+    }
   } else {
     cerrarCamara();
   }
 });
 
 btnTransmision.addEventListener('click', () => {
-  transmisionActiva = !transmisionActiva;
+  if (!mediaRecorder) return;
+
+  // Iniciar grabación si no está activa
+  if (!grabando) {
+    chunks = [];
+    mediaRecorder.start();
+    grabando = true;
+    transmisionActiva = true;
+    btnTransmision.textContent = 'Pausar Transmisión';
+    console.log('🎥 Grabación iniciada');
+  }
+  // Pausar si está grabando
+  else if (mediaRecorder.state === 'recording') {
+    mediaRecorder.pause();
+    transmisionActiva = false;
+    btnTransmision.textContent = 'Reanudar Transmisión';
+    console.log('⏸️ Grabación pausada');
+  }
+  // Reanudar si estaba pausada
+  else if (mediaRecorder.state === 'paused') {
+    mediaRecorder.resume();
+    transmisionActiva = true;
+    btnTransmision.textContent = 'Pausar Transmisión';
+    console.log('▶️ Grabación reanudada');
+  }
+
   actualizarBordeVideo();
-
-  btnTransmision.textContent = transmisionActiva
-    ? 'Pausar Transmisión'
-    : 'Iniciar Transmisión';
-
-  console.log(transmisionActiva
-    ? '📡 Transmisión activa...'
-    : '⛔ Transmisión pausada');
 });
 
 btnTerminar.addEventListener('click', () => {
@@ -53,18 +100,15 @@ btnTerminar.addEventListener('click', () => {
   transmisionActiva = false;
   actualizarBordeVideo();
 
-  // Desactiva y oculta los botones
   btnCamara.style.display = 'none';
   btnTransmision.style.display = 'none';
   btnTerminar.style.display = 'none';
 
   console.log('✅ Todo finalizado. Procesando...');
 
-  // Simula una llamada a API (1s)
-  setTimeout(() => {
-    procesamientoCompletado = Math.random() > 0.3; // 70% éxito
-    mostrarResultadoYBotonRefrescar();
-  }, 1000);
+  if (mediaRecorder && grabando) {
+    mediaRecorder.stop();
+  }
 });
 
 function cerrarCamara() {
@@ -74,6 +118,7 @@ function cerrarCamara() {
     stream = null;
   }
   camaraActiva = false;
+  grabando = false;
   btnCamara.textContent = 'Abrir Cámara';
   btnTransmision.disabled = true;
   btnTerminar.disabled = true;
@@ -90,21 +135,20 @@ function actualizarBordeVideo() {
   }
 }
 
-function mostrarResultadoYBotonRefrescar() {
-  // Muestra el div de resultado solo cuando el procesamiento se complete
-  resultadoDiv.style.display = 'block'; // Mostrar el resultado
-  resultadoDiv.innerHTML = ''; // Limpia contenido anterior si lo hay
+function mostrarResultadoYBotonRefrescar(result = null) {
+  resultadoDiv.style.display = 'block';
+  resultadoDiv.innerHTML = '';
 
   const btnRefrescar = document.createElement('button');
   btnRefrescar.textContent = '🔄 Refrescar Página';
   btnRefrescar.classList.add('btn-refrescar');
   btnRefrescar.onclick = () => location.reload();
 
-  if (procesamientoCompletado) {
+  if (procesamientoCompletado && result) {
     const resultadoTexto = document.createElement('p');
     resultadoTexto.textContent = '📊 Resultado del análisis recibido:';
     const info = document.createElement('p');
-    info.textContent = '→ Número de baches: [en espera] | Tipo: [en espera]';
+    info.textContent = `→ Archivo: ${result.filename} | Tamaño: ${result.size} bytes`;
     resultadoDiv.appendChild(resultadoTexto);
     resultadoDiv.appendChild(info);
   } else {

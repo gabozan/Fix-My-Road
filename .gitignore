@@ -4,3 +4,9 @@ data/
 ._*
 deep_learning/yolo11n.pt
 deep_learning/yolov8s.pt
+node_modules/
+*.ps1
+*.cmd
+*.log
+.DS_Store
+.env
