@@ -12,9 +12,9 @@
                     <a id="options-btn">Opciones</a>
                     <ul class="dropdown-menu" id="options-menu">
                         <li><a href="index.php?action=resource-ranking">Ranking</a></li>
-                        <li><a href="index.php?action=resource-realtime">Detección en tiempo real</a></li>
-                        <li><a href="index.php?action=resource-video">Detección de video</a></li>
-                        <li><a href="index.php?action=resource-image">Detección de imagen</a></li>
+                        <li><a href="index.php?action=resource-real-time">Detección en tiempo real</a></li>
+                        <li><a href="index.php?action=resource-video-detect">Detección de video</a></li>
+                        <li><a href="index.php?action=resource-image-detect">Detección de imagen</a></li>
                     </ul>
                 </div>
             </div>

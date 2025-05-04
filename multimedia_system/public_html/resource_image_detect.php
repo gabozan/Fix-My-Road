@@ -5,14 +5,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" href="./assets/imgs/logo_Fix-my-road_no_background-white.png">
         <link rel="stylesheet" href="assets/css/global.css">
-        <link rel="stylesheet" href="assets/css/register.css">
-        <title>Fix my road - Registro</title>
+        <link rel="stylesheet" href="assets/css/detect.css">
+        <title>Fix my road - Detectar Imagen</title>
     </head>
     <body>
         <?php require __DIR__ . "/controller/controllerHeader.php" ?>
 
         <main>
-            <?php require __DIR__ . "/controller/controllerRegister.php" ?>
+            <?php require __DIR__ . "/controller/controllerImageDetect.php" ?>
         </main>
 
         <?php require __DIR__ . "/controller/controllerFooter.php" ?>

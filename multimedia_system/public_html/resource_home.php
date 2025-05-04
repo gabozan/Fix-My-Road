@@ -7,10 +7,7 @@
   <link rel="icon" href="./assets/imgs/logo_Fix-my-road_no_background-white.png">
   <link rel="stylesheet" href="assets/css/global.css">
   <link rel="stylesheet" href="assets/css/home.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="/assets/js/userAction.js"></script>
-  <script src="../mapsJavascriptAPI.js" defer></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4YMWh8KpycM8gmFRuhIqhxP7uN8Wwj1Y&callback=initMap" defer></script>
+  
 </head>
 <body>
   <?php require __DIR__ . "/controller/controllerHeader.php" ?>
@@ -21,5 +18,8 @@
 
   <?php require __DIR__ . "/controller/controllerFooter.php" ?>
 
+  <script src="assets/js/mapsJavascriptAPI.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4YMWh8KpycM8gmFRuhIqhxP7uN8Wwj1Y&callback=initMap" defer></script>
 </body>
 </html>
