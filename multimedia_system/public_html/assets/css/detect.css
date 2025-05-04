@@ -6,7 +6,6 @@
     align-items: center;
     padding: 30px 20px;
     background-color: #2d3748; /* Gris oscuro */
-    min-height: 100vh; /* Ocupa toda la altura de la pantalla */
 }
 
 /* ----------Título principal de la página (h1) ---------- */

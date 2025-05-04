@@ -1,8 +1,7 @@
 <div class="detection-container">
-
-    <h1>Control de Cámara y Transmisión</h1>
-
+    <h1>Deteccion en tiempo real</h1>
     <div id="realtime-container">
+        <h1>Control de Cámara y Transmisión</h1>
         <video id="video" autoplay muted></video>
         <div>
             <button id="toggleCamara">Abrir Cámara</button>
