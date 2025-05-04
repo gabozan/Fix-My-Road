@@ -32,7 +32,6 @@ btnCamara.addEventListener('click', async () => {
       mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
       mediaRecorder.ondataavailable = e => chunks.push(e.data);
 
-      // Aquí va el evento onstop correctamente definido
       mediaRecorder.onstop = async () => {
         grabando = false;
         const blob = new Blob(chunks, { type: 'video/webm' });
@@ -67,8 +66,6 @@ btnCamara.addEventListener('click', async () => {
 
 btnTransmision.addEventListener('click', () => {
   if (!mediaRecorder) return;
-
-  // Iniciar grabación si no está activa
   if (!grabando) {
     chunks = [];
     mediaRecorder.start();
@@ -77,14 +74,12 @@ btnTransmision.addEventListener('click', () => {
     btnTransmision.textContent = 'Pausar Transmisión';
     console.log('🎥 Grabación iniciada');
   }
-  // Pausar si está grabando
   else if (mediaRecorder.state === 'recording') {
     mediaRecorder.pause();
     transmisionActiva = false;
     btnTransmision.textContent = 'Reanudar Transmisión';
     console.log('⏸️ Grabación pausada');
   }
-  // Reanudar si estaba pausada
   else if (mediaRecorder.state === 'paused') {
     mediaRecorder.resume();
     transmisionActiva = true;
