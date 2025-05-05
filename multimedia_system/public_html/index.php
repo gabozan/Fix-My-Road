@@ -8,8 +8,14 @@ session_start();
 $action = $_GET['action'] ?? NULL;
 
 switch ($action) {
-    case 'resource-record':
-        require __DIR__ . '/resource_record.php';
+    case 'resource-image-detect':
+        require __DIR__ . '/resource_image_detect.php';
+        break;
+    case 'resource-video-detect':
+        require __DIR__ . '/resource_video_detect.php';
+        break;
+    case 'resource-real-time':
+        require __DIR__ . '/resource_real_time.php';
         break;
     case 'resource-ranking':
         require __DIR__ . '/resource_ranking.php';

@@ -20,15 +20,8 @@
     padding: 30px 20px;
     display: flex;
     flex-direction: column;
-    gap: 40px;
-}
-
-/* ----------Título del ranking---------- */
-.ranking-title {
     text-align: center;
-    margin-bottom: 30px;
-    font-size: 32px;
-    color: #f7fafc;
+    gap: 20px;
 }
 
 /* ----------Lista de entradas del ranking---------- */

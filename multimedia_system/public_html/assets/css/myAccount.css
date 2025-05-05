@@ -1,4 +1,4 @@
-/* ----------Contenedor principal de "Mi Cuenta"---------- */
+/* ----------Mi Cuenta - Contenedor principal---------- */
 #account-container {
     display: flex;
     justify-content: center;
@@ -8,39 +8,30 @@
     background-color: #2d3748; /* Gris oscuro de fondo */
 }
 
-/* ----------Formulario principal de cuenta---------- */
+/* ----------Formulario - Contenedor principal---------- */
 #form-container {
     background-color: #4a5568; /* Gris neutro */
     border-radius: 15px;
     padding: 25px;
-    width: 100%;
-    max-width: 500px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Máxima anchura del formulario */
 }
 
-/* ----------Contenedor de la foto de perfil---------- */
-.profile-picture-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+/* ----------Título del formulario (h2)---------- */
+#form-container h2 {
+    font-size: 24px;
+    text-align: center;
     margin-bottom: 20px;
+    color: #f7fafc; /* Blanco suave */
 }
 
-/* ----------Vista previa de la foto de perfil (circular)---------- */
-.profile-picture-preview {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 3px solid #cbd5e0; /* Gris claro */
-    margin-top: 10px;
-    transition: transform 0.3s ease;
-}
-
-/* ----------Efecto al pasar el ratón sobre la imagen de perfil (ampliación)---------- */
-.profile-picture-preview:hover {
-    transform: scale(1.05);
+/* ----------Título de los formularios (h3)---------- */
+#form-container form h3 {
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 15px;
+    color: #f7fafc; /* Blanco suave */
 }
 
 /* ----------Contenedor de los campos de entrada---------- */
@@ -68,16 +59,6 @@
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* ----------Estilo para el campo de carga de archivo (foto de perfil)---------- */
-input[type="file"] {
-    padding: 5px;
-    font-size: 14px;
-    background-color: #1a202c; /* Gris muy oscuro */
-    border: 1px solid #cbd5e0; /* Gris claro */
-    border-radius: 10px;
-    color: #f7fafc; /* Blanco suave */
-}
-
 /* ----------Botón de submit---------- */
 input[type="submit"] {
     width: 100%;
@@ -88,11 +69,38 @@ input[type="submit"] {
     border: none;
     cursor: pointer;
     color: #f7fafc; /* Blanco suave */
-    font-size: 16px;
     font-weight: bold;
 }
 
 input[type="submit"]:hover {
     transform: scale(1.05);
     background-color: #3182ce; /* Azul más oscuro al pasar el mouse */
+}
+
+/* ----------Espacio entre los formularios dentro de #form-container---------- */
+#form-container form {
+    margin-bottom: 20px; /* Espacio entre formularios */
+}
+
+#form-container form:last-child {
+    margin-bottom: 0; /* El último formulario no tendrá margen */
+}
+
+/* ----------Estilo para los enlaces debajo de los formularios---------- */
+#form-container p {
+    margin: 10px;
+    text-align: center;
+    font-size: 14px;
+    color: #f7fafc; /* Blanco suave */
+}
+
+#form-container p a {
+    text-decoration: none;
+    color: #60a5fa; /* Azul suave */
+    font-weight: bold;
+}
+
+#form-container p a:hover {
+    transform: scale(1.05);
+    color: #3182ce; /* Azul más oscuro */
 }

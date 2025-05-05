@@ -13,77 +13,73 @@ def preprocess_cv(input_path, output_path, new_size):
     Preprocesa las imágenes y sus etiquetas para técnicas clásicas de visión por computador.
 
     Parámetros:
-        input_path (Path): Ruta al directorio de entrada que contiene las carpetas "train" y "test".
+        input_path (Path): Ruta al directorio de entrada que contiene las carpetas "train".
         output_path (Path): Ruta al directorio de salida donde se guardarán las imágenes procesadas.
         new_size (tuple): Tamaño de redimensionado final (ancho, alto).
     """
-    for split in ["train", "test"]:
-        in_image_dir = input_path / split
-        out_image_dir = output_path / split
-        out_label_dir = output_path / "labels"
-        out_image_dir.mkdir(parents=True, exist_ok=True)
-        out_label_dir.mkdir(parents=True, exist_ok=True)
+    in_image_dir = input_path / "train"
+    out_image_dir = output_path / "train"
+    out_label_dir = output_path / "labels"
+    out_image_dir.mkdir(parents=True, exist_ok=True)
+    out_label_dir.mkdir(parents=True, exist_ok=True)
 
-        for image_file in in_image_dir.glob("*.jpg"):
-            file_name = image_file.stem
-            try:
-                img = load_image(image_file)
-            except FileNotFoundError as e:
-                print(e)
-                continue
-            original_size = (img.shape[1], img.shape[0])
+    for image_file in in_image_dir.glob("*.jpg"):
+        file_name = image_file.stem
+        try:
+            img = load_image(image_file)
+        except FileNotFoundError as e:
+            print(e)
+            continue
+        original_size = (img.shape[1], img.shape[0])
 
-            crop_box = None
-            if "norway" in file_name.lower():
-                crop_w = original_size[0] // 2
-                crop_box = (0, 0, crop_w, original_size[1])
-                img = img[:, :crop_w]
-            img_resized = cv2.resize(img, new_size, interpolation=cv2.INTER_AREA)
-            save_image((out_image_dir / image_file.name), img_resized)
-            
-            in_label_path = input_path / "labels" / (file_name + ".xml")
-            out_label_path = out_label_dir / (file_name + ".txt")
+        crop_box = None
+        if "norway" in file_name.lower():
+            crop_w = original_size[0] // 2
+            crop_box = (0, 0, crop_w, original_size[1])
+            img = img[:, :crop_w]
+        img_resized = cv2.resize(img, new_size, interpolation=cv2.INTER_AREA)
+        save_image((out_image_dir / image_file.name), img_resized)
 
-            if in_label_path.exists():
-                tree = resize_xml_labels(in_label_path, new_size, original_size, crop_box, "classic_vision")
-                xml_to_txt(tree, out_label_path, new_size, "classic_vision")
+        in_label_path = input_path / "labels" / (file_name + ".xml")
+        out_label_path = out_label_dir / (file_name + ".txt")
+
+        tree = resize_xml_labels(in_label_path, new_size, original_size, crop_box, "classic_vision")
+        xml_to_txt(tree, out_label_path, new_size, "classic_vision")
 
 
 def preprocess_dl(input_path, output_path, new_size):
     """
-        Preprocesa las imágenes y sus etiquetas para deep learning.
+    Preprocesa las imágenes y sus etiquetas para deep learning.
 
-        Parámetros:
-            input_path (Path): Ruta al directorio de entrada que contiene las carpetas "train" y "test".
-            output_path (Path): Ruta al directorio de salida donde se guardarán las imágenes procesadas.
-            new_size (tuple): Tamaño de redimensionado final (ancho, alto).
-        """
-    for split in ["train", "test"]:
-        in_image_dir = input_path / split
-        out_image_dir = output_path / split
-        out_label_dir = output_path / "labels"
-        out_image_dir.mkdir(parents=True, exist_ok=True)
-        out_label_dir.mkdir(parents=True, exist_ok=True)
+    Parámetros:
+        input_path (Path): Ruta al directorio de entrada que contiene las carpetas "train".
+        output_path (Path): Ruta al directorio de salida donde se guardarán las imágenes procesadas.
+        new_size (tuple): Tamaño de redimensionado final (ancho, alto).
+    """
+    in_image_dir = input_path / "train"
+    out_image_dir = output_path / "train"
+    out_label_dir = output_path / "labels"
+    out_image_dir.mkdir(parents=True, exist_ok=True)
+    out_label_dir.mkdir(parents=True, exist_ok=True)
 
-        for image_file in in_image_dir.glob("*.jpg"):
-            file_name = image_file.stem
-            try:
-                img = load_image(image_file)
-            except FileNotFoundError as e:
-                print(e)
-                continue
-            original_size = (img.shape[1], img.shape[0])
+    for image_file in in_image_dir.glob("*.jpg"):
+        file_name = image_file.stem
+        try:
+            img = load_image(image_file)
+        except FileNotFoundError as e:
+            print(e)
+            continue
+        original_size = (img.shape[1], img.shape[0])
 
-            crop_box = None
-            img_resized, scale, (pad_x, pad_y) = letterbox(img, original_size)
-            save_image((out_image_dir / image_file.name), img_resized)
-            
-            in_label_path = input_path / "labels" / (file_name + ".xml")
-            out_label_path = out_label_dir / (file_name + ".txt")
+        crop_box = None
+        img_resized, scale, (pad_x, pad_y) = letterbox(img, original_size)
+        save_image((out_image_dir / image_file.name), img_resized)
 
-            if in_label_path.exists():
-                tree = resize_xml_labels(in_label_path, new_size, original_size, crop_box, "deep_learning", scale, (pad_x, pad_y))
-                xml_to_txt(tree, out_label_path, new_size, "deep_learning")
+        in_label_path = input_path / "labels" / (file_name + ".xml")
+        out_label_path = out_label_dir / (file_name + ".txt")
+
+        tree = resize_xml_labels(in_label_path, new_size, original_size, crop_box, "deep_learning", scale, (pad_x, pad_y))
+        xml_to_txt(tree, out_label_path, new_size, "deep_learning")
 
 
 def preprocess_dataset(input_folder, output_folder, mode="classic_vision", new_size=(512, 512)):

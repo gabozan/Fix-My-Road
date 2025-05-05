@@ -68,7 +68,7 @@ def train_and_validate(fliplr, hsv_h, hsv_s, hsv_v, scale, batch_size, epochs, r
             "scale":      scale,
             "batch_size": batch_size,
             "epochs":     epochs,
-            "weights":    str(Path(PROJECT) / experiment_name / "weights" / "best.pt")
+            "weights":    str(Path(PROJECT) / experiment_name / "weights" / "theRoadFixer.pt")
         }, f, indent=4)
     print(f"Métricas guardadas en {results_path}\n")
 
