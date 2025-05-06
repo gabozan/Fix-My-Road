@@ -9,6 +9,6 @@
             <button id="terminarTodo" disabled>Terminar Todo</button>
         </div>
     </div>
-
+    <div id="status"></div>
     <script src="assets/js/video.js"></script>
 </div>
