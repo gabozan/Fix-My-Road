@@ -84,7 +84,7 @@ def split_dataset(dataset_dir, train_split=0.8, seed=42):
 if __name__ == "__main__":
     input_folder_cv = "../data/processed_cv"
     input_folder_dl = "../data/processed_dl"
-    mode = "deep_learning"
+    mode = "classic_vision"
     train_split = 0.8
     seed = 24
 
