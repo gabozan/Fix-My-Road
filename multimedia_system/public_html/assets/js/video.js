@@ -1,23 +1,52 @@
-const video = document.getElementById('video');
+const video = document.getElementById('video'); 
 const btnCamara = document.getElementById('toggleCamara');
 const btnTransmision = document.getElementById('toggleTransmision');
 const btnTerminar = document.getElementById('terminarTodo');
-const realtimeContainer = document.getElementById('realtime-container');
+const status = document.getElementById('status');
 
 let stream = null;
 let camaraActiva = false;
 let transmisionActiva = false;
-let procesamientoCompletado = false;
-
+let grabando = false;
 let mediaRecorder;
 let chunks = [];
-let grabando = false;
+let positions = [];
+let lastPosition = null;
+let watchId = null;
 
-const resultadoDiv = document.createElement('div');
-resultadoDiv.id = 'resultado-procesamiento';
-resultadoDiv.classList.add('resultado-procesamiento');
-resultadoDiv.style.display = 'none';
-realtimeContainer.insertAdjacentElement('afterend', resultadoDiv);
+function startGeolocation() {
+  if (!navigator.geolocation) {
+    status.textContent = '⚠️ Geolocalización no soportada.';
+    return;
+  }
+  watchId = navigator.geolocation.watchPosition(
+    pos => lastPosition = pos.coords,
+    err => console.warn('GPS error:', err.message),
+    { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
+  );
+}
+
+function stopGeolocation() {
+  if (watchId != null) navigator.geolocation.clearWatch(watchId);
+}
+
+let lastLoggedSecond = -1;
+
+function handleFrame(now, metadata) {
+  if (!grabando) return;
+
+  const currentSecond = Math.floor(metadata.mediaTime);
+  if (lastPosition && currentSecond !== lastLoggedSecond) {
+    lastLoggedSecond = currentSecond;
+    positions.push({
+      mediaTime: metadata.mediaTime,
+      latitude: lastPosition.latitude,
+      longitude: lastPosition.longitude
+    });
+  }
+
+  video.requestVideoFrameCallback(handleFrame);
+}
 
 btnCamara.addEventListener('click', async () => {
   if (!camaraActiva) {
@@ -31,31 +60,7 @@ btnCamara.addEventListener('click', async () => {
 
       mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
       mediaRecorder.ondataavailable = e => chunks.push(e.data);
-
-      mediaRecorder.onstop = async () => {
-        grabando = false;
-        const blob = new Blob(chunks, { type: 'video/webm' });
-
-        try {
-          const resp = await fetch(
-            'https://europe-southwest1-fixmyroad-458407.cloudfunctions.net/uploadVideo',
-            {
-              method: 'POST',
-              headers: { 'Content-Type': 'video/webm' },
-              body: blob
-            }
-          );
-          const result = await resp.json();
-
-          procesamientoCompletado = resp.ok;
-          mostrarResultadoYBotonRefrescar(result);
-        } catch (err) {
-          console.error('❌ Error subiendo:', err.message);
-          procesamientoCompletado = false;
-          mostrarResultadoYBotonRefrescar();
-        }
-      };
-
+      mediaRecorder.onstop = onRecordingStop;
     } catch (err) {
       console.error('Error al abrir la cámara:', err);
     }
@@ -68,41 +73,33 @@ btnTransmision.addEventListener('click', () => {
   if (!mediaRecorder) return;
   if (!grabando) {
     chunks = [];
-    mediaRecorder.start();
+    positions = [];
+    lastPosition = null;
     grabando = true;
+    mediaRecorder.start();
+    startGeolocation();
+    video.requestVideoFrameCallback(handleFrame);
     transmisionActiva = true;
     btnTransmision.textContent = 'Pausar Transmisión';
-    console.log('🎥 Grabación iniciada');
-  }
-  else if (mediaRecorder.state === 'recording') {
+    status.textContent = '🔴 Grabando…';
+  } else if (mediaRecorder.state === 'recording') {
     mediaRecorder.pause();
     transmisionActiva = false;
     btnTransmision.textContent = 'Reanudar Transmisión';
-    console.log('⏸️ Grabación pausada');
-  }
-  else if (mediaRecorder.state === 'paused') {
+  } else if (mediaRecorder.state === 'paused') {
     mediaRecorder.resume();
     transmisionActiva = true;
     btnTransmision.textContent = 'Pausar Transmisión';
-    console.log('▶️ Grabación reanudada');
   }
-
-  actualizarBordeVideo();
 });
 
 btnTerminar.addEventListener('click', () => {
   cerrarCamara();
-  transmisionActiva = false;
-  actualizarBordeVideo();
-
-  btnCamara.style.display = 'none';
-  btnTransmision.style.display = 'none';
-  btnTerminar.style.display = 'none';
-
-  console.log('✅ Todo finalizado. Procesando...');
-
   if (mediaRecorder && grabando) {
+    grabando = false;
     mediaRecorder.stop();
+    stopGeolocation();
+    status.textContent = '⏳ Deteniendo y subiendo...';
   }
 });
 
@@ -119,38 +116,37 @@ function cerrarCamara() {
   btnTerminar.disabled = true;
 }
 
-function actualizarBordeVideo() {
-  video.classList.remove('borde-verde', 'borde-rojo');
-  if (!camaraActiva) return;
+async function onRecordingStop() {
+  const videoBlob = new Blob(chunks, { type: 'video/webm' });
 
-  if (transmisionActiva) {
-    video.classList.add('borde-verde');
-  } else {
-    video.classList.add('borde-rojo');
+  try {
+    const videoResp = await fetch(
+      'https://europe-southwest1-fixmyroad-458407.cloudfunctions.net/uploadVideo/upload-video',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'video/webm' },
+        body: videoBlob
+      }
+    );
+    const videoResult = await videoResp.json();
+    if (!videoResp.ok) throw new Error(videoResult.error || videoResp.statusText);
+    status.textContent = '📤 Vídeo subido, subiendo posiciones...';
+
+    const posResp = await fetch(
+      'https://europe-southwest1-fixmyroad-458407.cloudfunctions.net/uploadVideo/upload-positions',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(positions)
+      }
+    );
+    const posResult = await posResp.json();
+    if (!posResp.ok) throw new Error(posResult.error || posResp.statusText);
+
+    status.innerHTML = `✅ Vídeo subido: <code>${videoResult.filename}</code><br>
+                        ✅ Posiciones subidas: <code>${posResult.filename}</code><br>
+                        📍 Puntos GPS: ${positions.length}`;
+  } catch (err) {
+    status.textContent = '❌ Error subiendo: ' + err.message;
   }
-}
-
-function mostrarResultadoYBotonRefrescar(result = null) {
-  resultadoDiv.style.display = 'block';
-  resultadoDiv.innerHTML = '';
-
-  const btnRefrescar = document.createElement('button');
-  btnRefrescar.textContent = '🔄 Refrescar Página';
-  btnRefrescar.classList.add('btn-refrescar');
-  btnRefrescar.onclick = () => location.reload();
-
-  if (procesamientoCompletado && result) {
-    const resultadoTexto = document.createElement('p');
-    resultadoTexto.textContent = '📊 Resultado del análisis recibido:';
-    const info = document.createElement('p');
-    info.textContent = `→ Archivo: ${result.filename} | Tamaño: ${result.size} bytes`;
-    resultadoDiv.appendChild(resultadoTexto);
-    resultadoDiv.appendChild(info);
-  } else {
-    const errorTexto = document.createElement('p');
-    errorTexto.textContent = '⚠️ No se pudo obtener respuesta del análisis. Puedes refrescar la página manualmente.';
-    resultadoDiv.appendChild(errorTexto);
-  }
-
-  resultadoDiv.appendChild(btnRefrescar);
 }
