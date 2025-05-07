@@ -25,26 +25,25 @@ def preprocess_cv(input_path, output_path, new_size):
 
     for image_file in in_image_dir.glob("*.jpg"):
         file_name = image_file.stem
-        try:
-            img = load_image(image_file)
-        except FileNotFoundError as e:
-            print(e)
-            continue
-        original_size = (img.shape[1], img.shape[0])
-
-        crop_box = None
         if "norway" in file_name.lower():
+            try:
+                img = load_image(image_file)
+            except FileNotFoundError as e:
+                print(e)
+                continue
+            original_size = (img.shape[1], img.shape[0])
+
             crop_w = original_size[0] // 2
             crop_box = (0, 0, crop_w, original_size[1])
             img = img[:, :crop_w]
-        img_resized = cv2.resize(img, new_size, interpolation=cv2.INTER_AREA)
-        save_image((out_image_dir / image_file.name), img_resized)
+            img_resized = cv2.resize(img, new_size, interpolation=cv2.INTER_AREA)
+            save_image((out_image_dir / image_file.name), img_resized)
 
-        in_label_path = input_path / "labels" / (file_name + ".xml")
-        out_label_path = out_label_dir / (file_name + ".txt")
+            in_label_path = input_path / "labels" / (file_name + ".xml")
+            out_label_path = out_label_dir / (file_name + ".txt")
 
-        tree = resize_xml_labels(in_label_path, new_size, original_size, crop_box, "classic_vision")
-        xml_to_txt(tree, out_label_path, new_size, "classic_vision")
+            tree = resize_xml_labels(in_label_path, new_size, original_size, crop_box, "classic_vision")
+            xml_to_txt(tree, out_label_path, new_size, "classic_vision")
 
 
 def preprocess_dl(input_path, output_path, new_size):
@@ -110,10 +109,10 @@ def preprocess_dataset(input_folder, output_folder, mode="classic_vision", new_s
 ########################################################################################################################
 
 if __name__ == "__main__":
-    input_folder = "../data/raw"
+    input_folder = "../data/raw_reduced"
     output_folder_cv = "../data/processed_cv"
     output_folder_dl = "../data/processed_dl"
-    mode = "deep_learning"
+    mode = "classic_vision"
 
     print("Comenzando preprocesamiento de datos")
     if mode == "classic_vision":
