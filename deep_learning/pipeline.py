@@ -9,7 +9,7 @@ from predict import predict_image
 ########################################################################################################################
 
 MODEL_PATH = "theRoadFixer.pt"
-INPUT_DIR = Path("../data/raw_reduced/test/")
+INPUT_DIR = Path("../data/raw/test/")
 PROCESSED_DIR = Path("../data/processed_dl/test/")
 OUTPUT_DIR = Path("../predictions/")
 CSV_PATH = OUTPUT_DIR / "predictions_dl.csv"
