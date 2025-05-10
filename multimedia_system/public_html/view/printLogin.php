@@ -7,6 +7,7 @@
         </ul>
     </div>
 <?php endif; ?>
+
 <div id="login-container">
     <div id="form-container">
         <form action="index.php?action=resource-login" method="post">
@@ -30,7 +31,7 @@
                 <span>o</span>
             </div>
 
-            <a href="URL_DE_GOOGLE_AUTH" class="google-button">
+            <a href="javascript:void(0);" id="google-login" class="google-button">
                 <img src="./assets/imgs/google-icon.png" alt="Iniciar sesión con Google">
             </a>
         </div>
@@ -41,3 +42,4 @@
 
     </div>
 </div>
+<script src="./firebase/loginGoogle.js" type="module"></script>
