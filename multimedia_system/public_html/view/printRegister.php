@@ -13,7 +13,7 @@
             <h2>Crear Cuenta</h2>
             
             <div class="input-container">
-                <label for="name">Nombre</label>
+                <label for="name">Nombre de Usuario</label>
                 <input type="text" name="name" required pattern="[A-Za-zÀ-ÿ\s]{1,}" title="Solo se permiten letras y espacios.">
             </div>
 

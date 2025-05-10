@@ -9,7 +9,9 @@
         <div class="dropdowns-tuple">
             <div class="options-actions">
                 <div class="dropdown">
-                    <a id="options-btn">Opciones</a>
+                    <a id="options-btn">
+                        <img src="./assets/imgs/options-icon-white.png" alt="Opciones" width="100px">
+                    </a>
                     <ul class="dropdown-menu" id="options-menu">
                         <li><a href="index.php?action=resource-ranking">Ranking</a></li>
                         <li><a href="index.php?action=resource-real-time">Detección en tiempo real</a></li>
