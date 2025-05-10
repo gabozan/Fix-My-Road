@@ -7,6 +7,7 @@
         </ul>
     </div>
 <?php endif; ?>
+
 <div id="register-container">
     <div id="form-container">
         <form action="index.php?action=resource-register" method="post">
@@ -29,6 +30,16 @@
 
             <input type="submit" value="Registrar">
         </form>
+
+        <div class="google-login">
+            <div class="line-with-text">
+                <span>o</span>
+            </div>
+
+            <a href="URL_DE_GOOGLE_AUTH" class="google-button">
+                <img src="./assets/imgs/google-icon.png" alt="Iniciar sesión con Google">
+            </a>
+        </div>
 
         <div class="login">
             <p>Ya tengo cuenta <a href="index.php?action=resource-login"> Iniciar Sesión </a></p>

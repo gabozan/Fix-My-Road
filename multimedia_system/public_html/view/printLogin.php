@@ -25,6 +25,16 @@
             <input type="submit" value="Enviar">
         </form>
 
+        <div class="google-login">
+            <div class="line-with-text">
+                <span>o</span>
+            </div>
+
+            <a href="URL_DE_GOOGLE_AUTH" class="google-button">
+                <img src="./assets/imgs/google-icon.png" alt="Iniciar sesión con Google">
+            </a>
+        </div>
+
         <div class="registrar">
             <p>No tengo cuenta <a href="index.php?action=resource-register"> Crear una cuenta</a></p>
         </div>
