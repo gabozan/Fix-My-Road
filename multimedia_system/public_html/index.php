@@ -8,6 +8,9 @@ session_start();
 $action = $_GET['action'] ?? NULL;
 
 switch ($action) {
+    case 'resource_register_google':
+        require __DIR__ . '/resource_register_google.php';
+        break;
     case 'resource-image-detect':
         require __DIR__ . '/resource_image_detect.php';
         break;

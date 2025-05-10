@@ -1,7 +1,5 @@
 <footer>
     <div id="footer-container">
-        
-
         <div class="footer-section">
             <h4>Soporte</h4>
             <ul>

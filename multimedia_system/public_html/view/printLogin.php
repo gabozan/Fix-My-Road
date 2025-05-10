@@ -30,7 +30,6 @@
             <div class="line-with-text">
                 <span>o</span>
             </div>
-
             <a href="javascript:void(0);" id="google-login" class="google-button">
                 <img src="./assets/imgs/google-icon.png" alt="Iniciar sesión con Google">
             </a>
