@@ -1,7 +1,6 @@
 <div class="detection-container">
-    <h1>Deteccion en tiempo real</h1>
+    <h1>Detección en tiempo real</h1>
     <div id="realtime-container">
-        <h1>Control de Cámara y Transmisión</h1>
         <video id="video" autoplay muted></video>
         <div>
             <button id="toggleCamara">Abrir Cámara</button>
@@ -10,5 +9,11 @@
         </div>
     </div>
     <div id="status"></div>
+
+    <?php
+        $nombreSesion = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
+        echo "<script>const sessionName = " . json_encode($nombreSesion) . ";</script>";
+    ?>
+
     <script src="assets/js/video.js"></script>
 </div>

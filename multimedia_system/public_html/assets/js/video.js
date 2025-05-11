@@ -118,22 +118,15 @@ function cerrarCamara() {
 
 async function onRecordingStop() {
   const videoBlob = new Blob(chunks, { type: 'video/webm' });
+  const timestamp = Date.now();
+  const baseVideoName     = `${sessionName}_${timestamp}_video`;
+  const basePositionsName = `${sessionName}_${timestamp}_positions`;
 
   try {
-    const videoResp = await fetch(
-      'https://europe-southwest1-fixmyroad-458407.cloudfunctions.net/uploadVideo/upload-video',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'video/webm' },
-        body: videoBlob
-      }
-    );
-    const videoResult = await videoResp.json();
-    if (!videoResp.ok) throw new Error(videoResult.error || videoResp.statusText);
-    status.textContent = '📤 Vídeo subido, subiendo posiciones...';
-
+    status.textContent = '📤 Subiendo posiciones…';
     const posResp = await fetch(
-      'https://europe-southwest1-fixmyroad-458407.cloudfunctions.net/uploadVideo/upload-positions',
+      `https://europe-southwest1-fixmyroad-458407.cloudfunctions.net/uploadVideo/upload-positions`
+      + `?basePositionsName=${encodeURIComponent(basePositionsName)}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -143,9 +136,25 @@ async function onRecordingStop() {
     const posResult = await posResp.json();
     if (!posResp.ok) throw new Error(posResult.error || posResp.statusText);
 
-    status.innerHTML = `✅ Vídeo subido: <code>${videoResult.filename}</code><br>
-                        ✅ Posiciones subidas: <code>${posResult.filename}</code><br>
-                        📍 Puntos GPS: ${positions.length}`;
+    status.textContent = '✅ Posiciones subidas, subiendo vídeo…';
+
+    const videoResp = await fetch(
+      `https://europe-southwest1-fixmyroad-458407.cloudfunctions.net/uploadVideo/upload-video`
+      + `?baseVideoName=${encodeURIComponent(baseVideoName)}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'video/webm' },
+        body: videoBlob
+      }
+    );
+    const videoResult = await videoResp.json();
+    if (!videoResp.ok) throw new Error(videoResult.error || videoResp.statusText);
+
+    status.innerHTML = `
+      ✅ Vídeo subido: <code>${videoResult.filename}</code><br>
+      ✅ Posiciones subidas: <code>${posResult.filename}</code><br>
+      📍 Puntos GPS: ${positions.length}
+    `;
   } catch (err) {
     status.textContent = '❌ Error subiendo: ' + err.message;
   }

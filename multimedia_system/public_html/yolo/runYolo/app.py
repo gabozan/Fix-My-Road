@@ -9,14 +9,6 @@ import traceback
 
 app = Flask(__name__)
 gcs = storage.Client()
-BUCKET_NAME = os.environ.get('BUCKET_NAME', 'fixmyroad-videos')
-DAMAGE_TYPES = [None, "longitudinal", "grieta", "erosion"]
-DAMAGE_POINTS = {
-    "longitudinal": 10,
-    "grieta": 15,
-    "erosion": 25
-}
-
 connector = Connector(ip_type=IPTypes.PUBLIC)
 
 def get_db_connection():
@@ -32,85 +24,71 @@ def get_db_connection():
         db=db_name
     )
 
+def download_to_temp(bucket, path, suffix):
+    tmp = tempfile.NamedTemporaryFile(suffix=suffix, delete=False)
+    bucket.blob(path).download_to_filename(tmp.name)
+    tmp.close()
+    return tmp.name
+
 @app.route('/process', methods=['POST'])
 def process_video():
     try:
         data = request.get_json()
-        src_name = data['name']
-        is_anonymous = 'userId' not in data
-        user_id = data.get('userId', 'anonymous')
-        video_id = os.path.splitext(os.path.basename(src_name))[0]
+        bucket = gcs.bucket(data['bucket'])
+        base_name = data['baseName'] #21_timestamp
+        user_id = data['userId'] #21
+        video_id = base_name.split('_')[1] #timestamp
 
+        # Es ruta video_file, positions_file, estan descargados en una carpeta temporal. 
+        # Tienes que abrirlos y leerlos.
+        video_file, positions_file = (
+            download_to_temp(bucket, f"videos/{base_name}_video.webm", ".webm"),
+            download_to_temp(bucket, f"positions/{base_name}_positions.json", ".json")
+        )
+
+        # Se generan imagenes falsas, que representan aquellas que contienen grietas del video. 
         detections = []
-        num_frames = 10
+        for i in range(10):
+            damage = random.choice(["longitudinal", "grieta", "erosion"])
+            img = Image.new('RGB', (640, 480), color=(30, 30, 30))
+            draw = ImageDraw.Draw(img)
+            draw.text((50, 50), f"{damage.upper()} (frame {i})", fill=(255, 200, 0))
 
-        for i in range(num_frames):
-            damage = random.choices(DAMAGE_TYPES, weights=[0.6, 0.2, 0.15, 0.05])[0]
-            if damage:
-                img = Image.new('RGB', (640, 480), color=(30, 30, 30))
-                draw = ImageDraw.Draw(img)
-                draw.text((50, 50), f"{damage.upper()} (frame {i})", fill=(255, 200, 0))
-                tmp = tempfile.NamedTemporaryFile(suffix='.jpg', delete=False)
-                img.save(tmp, format='JPEG')
-                tmp.close()
+            tmp_img = tempfile.NamedTemporaryFile(suffix='.jpg', delete=False)
+            img.save(tmp_img, format='JPEG')
+            tmp_img.close()
 
-                dest = f"detections/{user_id}/{video_id}/{i}_{damage}.jpg"
-                blob = gcs.bucket(BUCKET_NAME).blob(dest)
-                blob.upload_from_filename(tmp.name, content_type='image/jpeg')
-                detections.append({'frame': i, 'damage': damage, 'path': dest})
-                os.remove(tmp.name)
+            # Subir imagen con los bounding box de las grietas a google cloud storage. 
+            # La variable i puede contener cualquier número.
+            dest = f"detections/{user_id}/{video_id}/{i}.jpg"
+            bucket.blob(dest).upload_from_filename(tmp_img.name, content_type='image/jpeg')
+            os.remove(tmp_img.name)
 
-        total_points = 0
-        user_db_id = None
-
+           
         conn = get_db_connection()
         cur = conn.cursor()
 
-        if not is_anonymous:
-            cur.execute('SELECT id_user, score FROM "user" WHERE name = %s', (user_id,))
-            user = cur.fetchone()
-            if user:
-                user_db_id, current_score = user
-            else:
-                cur.execute('''
-                    INSERT INTO "user" (name, email, password, score)
-                    VALUES (%s, %s, %s, %s)
-                    RETURNING id_user
-                ''', (user_id, f"{user_id}@fake.com", "default_pass", 0))
-                user_db_id = cur.fetchone()[0]
-                current_score = 0
-        else:
-            user_db_id = None
-            current_score = 0
+        # Insertamos un daño aleatorio en la base de datos. Simplemente era para ver si se insertaba bien.
+        # Aquí insertas todas las detecciones que hayas hecho.
+        det = random.choice(detections)
+        cur.execute('''
+            INSERT INTO reports (id_user, damage_type, image_url, latitude, longitude)
+            VALUES (%s, %s, %s, %s, %s)
+        ''', (
+            user_id,
+            det["damage"],
+            det["path"],
+            20,
+            30
+        ))
 
-        for det in detections:
-            points = DAMAGE_POINTS.get(det["damage"], 0)
-            total_points += points
-            cur.execute('''
-                INSERT INTO reports (id_user, damage_type, image_url, latitude, longitude)
-                VALUES (%s, %s, %s, %s, %s)
-            ''', (
-                user_db_id, 
-                det["damage"],
-                det["path"],
-                round(random.uniform(-90, 90), 6),
-                round(random.uniform(-180, 180), 6)
-            ))
-
-        if not is_anonymous:
-            cur.execute('UPDATE "user" SET score = %s WHERE id_user = %s',
-                        (current_score + total_points, user_db_id))
-            
+        # Bro lo siguiente es importante, que sino nos quedamos sin plata.
         conn.commit()
         cur.close()
         conn.close()
 
-        return jsonify({
-            'userId': user_id,
-            'videoId': video_id,
-            'detections': detections,
-            'pointsEarned': total_points if not is_anonymous else 0
-        }), 200
+        # No se retorna nada
+        return '',204
 
     except Exception as e:
         print("[ERROR]", traceback.format_exc())
