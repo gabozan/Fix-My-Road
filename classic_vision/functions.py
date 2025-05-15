@@ -8,18 +8,20 @@ def preprocess_with_segmentation(img_bgr):
     segments = segmentation.quickshift(img_smooth, kernel_size=3, max_dist=6, ratio=0.5)
     return color.label2rgb(segments, img_bgr, kind='avg').astype(np.uint8)
 
-def detect_and_paint(img_bgr, hsv_min, hsv_max, kernel, color):
-    hsv  = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2HSV)
-    mask = cv2.inRange(hsv, hsv_min, hsv_max)
-    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN,  kernel)
-    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
-    cnts, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    road = np.zeros_like(mask)
+def detect_crack_in_road_region(original_img, road_mask):
+    masked = cv2.bitwise_and(original_img, original_img, mask=road_mask)
+    gray = cv2.cvtColor(masked, cv2.COLOR_BGR2GRAY)
+    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+    edges = cv2.Canny(blurred, 50, 150)
+    cnts, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    crack_boxed = original_img.copy()
     if cnts:
-        cv2.fillPoly(road, [max(cnts, key=cv2.contourArea)], 255)
-    painted = img_bgr.copy()
-    painted[road == 255] = color
-    return painted, road
+        largest = max(cnts, key=cv2.contourArea)
+        if cv2.contourArea(largest) > 30: 
+            x, y, w, h = cv2.boundingRect(largest)
+            cv2.rectangle(crack_boxed, (x, y), (x + w, y + h), (0, 0, 255), 2)
+
+    return crack_boxed
 
 def detect_crack_in_road_region(original_img, road_mask):
     # Aplicar la máscara de carretera
