@@ -14,7 +14,7 @@ document.getElementById('google-login').addEventListener('click', () => {
     signInWithPopup(getAuth(), new GoogleAuthProvider())
         .then((result) => {
             const user = result.user;
-            const url = `index.php?action=resource_register_google&name=${encodeURIComponent(user.displayName)}&email=${encodeURIComponent(user.email)}`;
+            const url = `index.php?action=resource_login_google&name=${encodeURIComponent(user.displayName)}&email=${encodeURIComponent(user.email)}`;
             window.location.href = url;
         })
         .catch((error) => {

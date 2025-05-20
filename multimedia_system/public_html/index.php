@@ -8,6 +8,9 @@ session_start();
 $action = $_GET['action'] ?? NULL;
 
 switch ($action) {
+    case 'resource_login_google':
+        require __DIR__ . '/controller/controllerLoginGoogle.php';
+        break;
     case 'resource_register_google':
         require __DIR__ . '/resource_register_google.php';
         break;
