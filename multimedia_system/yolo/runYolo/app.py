@@ -5,9 +5,14 @@ from PIL import Image, ImageDraw
 from google.cloud import storage
 from google.cloud.sql.connector import Connector, IPTypes
 import traceback
+from ultralytics import YOLO
 
 app = Flask(__name__)
 gcs = storage.Client()
+
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "models", "theRoadFixer.pt")
+model = YOLO(MODEL_PATH)
+
 BUCKET_NAME = os.environ.get('BUCKET_NAME', 'fixmyroad-videos')
 DAMAGE_TYPES = [None, "longitudinal", "transversal", "cocodrilo", "bache"]
 DAMAGE_POINTS = {
@@ -45,6 +50,7 @@ def process_video():
         num_frames = 10
 
         for i in range(num_frames):
+            # DETECCION DE DAÑO
             damage = random.choices(DAMAGE_TYPES, weights=[0.6, 0.2, 0.15, 0.05])[0]
             if damage:
                 img = Image.new('RGB', (640, 480), color=(30, 30, 30))
