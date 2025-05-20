@@ -10,9 +10,10 @@ import traceback
 app = Flask(__name__)
 gcs = storage.Client()
 BUCKET_NAME = os.environ.get('BUCKET_NAME', 'fixmyroad-videos')
-DAMAGE_TYPES = [None, "longitudinal", "grieta", "erosion"]
+DAMAGE_TYPES = [None, "longitudinal", "transversal", "grieta", "erosion"]
 DAMAGE_POINTS = {
     "longitudinal": 10,
+    "transversal": 10,
     "grieta": 15,
     "erosion": 25
 }
