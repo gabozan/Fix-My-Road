@@ -24,9 +24,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     $connection = connectDB();
-    if (isUsernameTaken($connection, $name)) {
-        $errors[] = "El nombre de usuario ya está en uso.";
-    }
     if (isEmailTaken($connection, $email)) {
         $errors[] = "El correo electrónico ya está en uso.";
     }

@@ -16,10 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $connection = connectDB();
 
-    if (isUsernameTakenByOtherUser($connection, $name, $userId)) {
-        $errors[] = "El nombre de usuario ya está en uso.";
-    }
-
     if (isEmailTakenByOtherUser($connection, $email, $userId)) {
         $errors[] = "El correo electrónico ya está en uso.";
     }
