@@ -176,6 +176,11 @@ footer {
     transform: scale(1.05);
 }
 
+.footer-section ul li a {
+    text-decoration: none;
+    color: inherit;
+}
+
 .footer-bottom {
     text-align: center;
     background-color: #4a5568;
