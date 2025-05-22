@@ -1,6 +1,8 @@
 flask
 gunicorn
 google-cloud-storage
-pillow
 opencv-python-headless
 cloud-sql-python-connector[pg8000]
+ultralytics==8.1.19
+torch==2.2.2
+numpy
