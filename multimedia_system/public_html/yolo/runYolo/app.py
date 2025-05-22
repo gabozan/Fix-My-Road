@@ -53,16 +53,19 @@ def process_video():
             img = Image.new('RGB', (640, 480), color=(30, 30, 30))
             draw = ImageDraw.Draw(img)
             draw.text((50, 50), f"{damage.upper()} (frame {i})", fill=(255, 200, 0))
-
             tmp_img = tempfile.NamedTemporaryFile(suffix='.jpg', delete=False)
             img.save(tmp_img, format='JPEG')
             tmp_img.close()
-
-            # Subir imagen con los bounding box de las grietas a google cloud storage. 
-            # La variable i puede contener cualquier número.
             dest = f"detections/{user_id}/{video_id}/{i}.jpg"
-            bucket.blob(dest).upload_from_filename(tmp_img.name, content_type='image/jpeg')
+            blob = bucket.blob(dest)
+            blob.upload_from_filename(tmp_img.name, content_type='image/jpeg')
             os.remove(tmp_img.name)
+            public_url = f"https://storage.googleapis.com/{bucket.name}/{dest}"
+
+            detections.append({
+                "damage": damage,
+                "path": public_url     
+            })
 
            
         conn = get_db_connection()
