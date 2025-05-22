@@ -4,6 +4,7 @@ function initMap() {
         center: centerMap,
         zoom: 10,
         disableDefaultUI: true,
+        gestureHandling: 'greedy',
         styles: [
       {
           "featureType": "water",
@@ -198,49 +199,46 @@ function initMap() {
     });
 
     fetch('index.php?action=get-damages')
-        .then(response => response.json())
-        .then(markers => {
-            if (!Array.isArray(markers) || markers.length === 0) {
-                alert("No se encontraron daños en la base de datos.");
-                return;
-            }
-            const fehMarker = "../../assets/señal_bache.png";
-            const infoWindow = new google.maps.InfoWindow({
-                minWidth: 200,
-                maxWidth: 200
-            });
-            const bounds = new google.maps.LatLngBounds();
-
-            markers.forEach(markerData => {
-                const marker = new google.maps.Marker({
-                    position: { lat: markerData.lat, lng: markerData.lng },
-                    map: map,
-                    icon: {
-                        url: fehMarker,
-                        scaledSize: new google.maps.Size(50, 50)
-                    }
-                });
-
-                const content = `
-                <img src="${markerData.imageUrl || ''}" alt="Daño" style="display:block; width:100%; max-width:260px; height:auto; margin:0 auto;">
-                `;
-                
-                marker.addListener('click', function(){
-                    infoWindow.setContent(content);
-                    infoWindow.open(map, marker);
-                });
-
-                bounds.extend(marker.getPosition());
-            });
-
-            map.fitBounds(bounds);
-
-            infoWindow.addListener('closeclick', function() {
-                map.fitBounds(bounds);
-            });
-        })
-        .catch(error => {
-            console.error("Error al cargar los marcadores:", error);
-            alert("Error al cargar los datos del mapa.");
+    .then(response => response.json())
+    .then(markers => {
+        if (!Array.isArray(markers) || markers.length === 0) {
+            alert("No se encontraron daños en la base de datos.");
+            return;
+        }
+        const iconos = {
+            bache: "../../assets/señal_bache.png",
+            grieta: "../../assets/señal_cocodrilo.png",
+            longitudinal: "../../assets/señal_grieta_longitudinal.png",
+            transversal: "../../assets/señal_grieta_transversal.png"
+        };
+        const infoWindow = new google.maps.InfoWindow({
+            minWidth: 200,
+            maxWidth: 200
         });
+        const bounds = new google.maps.LatLngBounds();
+        for (let i = 0; i < markers.length; i++) {
+            const tipo = markers[i].damageType.toLowerCase();
+            const iconoUrl = iconos[tipo] || "../../assets/logo_banner.png";
+            const marker = new google.maps.Marker({
+                position: { lat: markers[i].lat, lng: markers[i].lng },
+                map: map,
+                icon: {
+                    url: iconoUrl,
+                    scaledSize: new google.maps.Size(50, 50)
+                }
+            });
+            const content = `
+                <img src="${markers[i].imageUrl || ''}" alt="Daño" style="display:block; width:100%; max-width:260px; height:auto; margin:0 auto;">
+            `;
+            marker.addListener('click', function() {
+                infoWindow.setContent(content);
+                infoWindow.open(map, marker);
+            });
+            bounds.extend(marker.getPosition());
+        }
+        map.fitBounds(bounds);
+        infoWindow.addListener('closeclick', function() {
+            map.fitBounds(bounds);
+        });
+    })
 }
