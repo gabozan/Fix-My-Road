@@ -50,6 +50,9 @@ switch ($action) {
     case 'logout':
         require __DIR__ . '/controller/controllerLogout.php';
         break;
+    case 'get-damages':
+        require __DIR__ . '/controller/controllerGetDamages.php';
+        break;
     default: 
         require __DIR__ . '/resource_home.php';
         break;
