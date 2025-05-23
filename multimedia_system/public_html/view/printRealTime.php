@@ -11,7 +11,7 @@
     <div id="status"></div>
 
     <?php
-        $nombreSesion = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
+        $nombreSesion = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 'none';
         echo "<script>const sessionName = " . json_encode($nombreSesion) . ";</script>";
     ?>
 
