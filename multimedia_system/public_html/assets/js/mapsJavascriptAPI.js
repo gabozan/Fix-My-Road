@@ -188,10 +188,10 @@ function initMap() {
     legend.id = 'legend';
     legend.innerHTML = `
         <ul>
-          <li><img src="../../assets/señal_bache.png" alt="">Bache</li>
-          <li><img src="../../assets/señal_cocodrilo.png" alt="">Grieta</li>
-          <li><img src="../../assets/señal_grieta_longitudinal.png" alt="">Grieta longitudinal</li>
-          <li><img src="../../assets/señal_grieta_transversal.png" alt="">Grieta transversal</li>
+          <li><img src="assets/imgs/señal_bache.png" alt="">Bache</li>
+          <li><img src="assets/imgs/señal_cocodrilo.png" alt="">Grieta</li>
+          <li><img src="assets/imgs/señal_grieta_longitudinal.png" alt="">Grieta longitudinal</li>
+          <li><img src="assets/imgs/señal_grieta_transversal.png" alt="">Grieta transversal</li>
         </ul>
     `;
     google.maps.event.addListenerOnce(map, 'idle', function() {
@@ -206,10 +206,10 @@ function initMap() {
             return;
         }
         const iconos = {
-            bache: "../../assets/señal_bache.png",
-            grieta: "../../assets/señal_cocodrilo.png",
-            longitudinal: "../../assets/señal_grieta_longitudinal.png",
-            transversal: "../../assets/señal_grieta_transversal.png"
+            bache: "assets/imgs/señal_bache.png",
+            grieta: "assets/imgs/señal_cocodrilo.png",
+            longitudinal: "assets/imgs/señal_grieta_longitudinal.png",
+            transversal: "assets/imgs/señal_grieta_transversal.png"
         };
         const infoWindow = new google.maps.InfoWindow({
             minWidth: 200,
