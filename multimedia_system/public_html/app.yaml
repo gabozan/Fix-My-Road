@@ -1,5 +1,20 @@
-runtime: php83
+runtime: php81
+env: standard
+
 instance_class: F1
 automatic_scaling:
   min_instances: 1
-  max_instances: 3
+  max_instances: 2
+
+handlers:
+  - url: /assets
+    static_dir: public_html/assets
+    expiration: "30d"
+
+  - url: /(.*\.(css|js|png|jpg|jpeg|gif|svg|woff2?|ttf))
+    static_files: public_html/\1
+    upload: public_html/.*\.(css|js|png|jpg|jpeg|gif|svg|woff2?|ttf)
+    expiration: "30d"
+
+  - url: /.*
+    script: public_html/index.php
