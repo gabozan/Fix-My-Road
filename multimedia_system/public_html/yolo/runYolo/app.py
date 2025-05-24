@@ -12,6 +12,14 @@ import json
 import shutil
 import sys
 
+#Nuevo de Sebas
+import base64
+from email.mime.text import MIMEText
+from googleapiclient.discovery import build
+from google.auth.transport.requests import Request
+import pickle
+
+
 damages = {
     0: "longitudinal",
     1: "transversal",
@@ -41,6 +49,34 @@ except Exception:
     print("[ERROR] Excepción cargando el modelo:", file=sys.stderr, flush=True)
     print(traceback.format_exc(), file=sys.stderr, flush=True)
     model = None  # Por si acaso para que no pete más adelante
+
+
+# Nuevo de Sebas
+SCOPES = ['https://www.googleapis.com/auth/gmail.send']
+
+def send_email(to, subject, body):
+    creds = None
+    if os.path.exists('token.pickle'):
+        with open('token.pickle', 'rb') as token:
+            creds = pickle.load(token)
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            raise Exception("Credenciales inválidas o token expirado")
+
+    service = build('gmail', 'v1', credentials=creds)
+
+    message = MIMEText(body)
+    message['to'] = to
+    message['from'] = "fixmyroad.noreply@gnmail.com"  
+    message['subject'] = subject
+
+    raw = base64.urlsafe_b64encode(message.as_bytes()).decode()
+    body = {'raw': raw}
+
+    message = service.users().messages().send(userId='me', body=body).execute()
+    print(f'✅ Correo enviado, ID: {message["id"]}')
 
 def get_db_connection():
     try:
@@ -222,15 +258,18 @@ def process_video():
                 det["lon"]
             ))
 
-        # Actualizar puntuación usuario
+        #Nuevo de Sebas
         if user_id != "none":
-            cur.execute('SELECT score FROM "user" WHERE id_user = %s', (user_id,))
-            result = cur.fetchone()
-            current_score = result[0] if result else 0
+            cur.execute('SELECT score, email FROM "user" WHERE id_user = %s', (user_id,))
+            current_score, user_email = cur.fetchone()
+
             new_score = current_score + total_points
             cur.execute('UPDATE "user" SET score = %s WHERE id_user = %s', (new_score, user_id))
-            print(f"[INFO] Usuario {user_id} score actualizado: {current_score} -> {new_score}", file=sys.stderr, flush=True)
 
+            mensaje = f"Vídeo procesado. Has recibido {total_points} puntos. Total acumulado: {new_score} puntos."
+            send_email(user_email, "FixMyRoad - Video procesado", mensaje)
+            print(f"[INFO] Usuario {user_id} score actualizado: {current_score} -> {new_score}", file=sys.stderr, flush=True)
+       
         conn.commit()
         cur.close()
         conn.close()

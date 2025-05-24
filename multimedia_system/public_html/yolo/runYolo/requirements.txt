@@ -6,3 +6,5 @@ opencv-python-headless
 cloud-sql-python-connector[pg8000]
 ultralytics==8.1.19
 torch==2.2.2
+google-api-python-client
+google-auth
