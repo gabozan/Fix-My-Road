@@ -1,19 +1,31 @@
+// Se importan las librerías necesarias:
+// - `@google-cloud/functions-framework`: para declarar funciones HTTP en Cloud Functions.
+// - `express`: para manejar rutas HTTP de forma más estructurada.
+// - `cors`: para permitir llamadas desde cualquier origen (CORS).
+// - `@google-cloud/storage`: para interactuar con Cloud Storage.
 const functions = require('@google-cloud/functions-framework');
 const express = require('express');
 const cors = require('cors');
 const { Storage } = require('@google-cloud/storage');
 
+// Se inicializa la app con CORS permitido para todos los orígenes.
+// También se prepara el bucket donde se almacenarán los archivos.
 const app = express();
 app.use(cors({ origin: '*' }));
 
 const storage = new Storage();
 const bucket = storage.bucket('fixmyroad-videos');
 
+// Antes de llegar a las rutas, se imprime por consola el método y la ruta de cada petición recibida.
+// Útil para depuración y trazabilidad.
 app.use((req, res, next) => {
   console.log('📥 Petición:', req.method, req.path);
   next();
 });
 
+// Esta ruta recibe archivos binarios de tipo video mediante POST.
+// El nombre base del archivo se espera como parámetro en la query (`baseVideoName`).
+// Guarda el archivo en el bucket con extensión `.webm`.
 app.post(
   '/upload-video',
   express.raw({ type: 'video/*', limit: '512mb' }),
@@ -44,6 +56,8 @@ app.post(
   }
 );
 
+// Esta ruta recibe un JSON con un array de posiciones GPS y las guarda como archivo .json en el bucket.
+// El nombre base del archivo también se recibe como parámetro en la query (`basePositionsName`).
 app.post(
   '/upload-positions',
   express.json(),
@@ -74,4 +88,5 @@ app.post(
   }
 );
 
+// Se expone la app de Express como una Cloud Function con el nombre `uploadVideo`.
 functions.http('uploadVideo', app);

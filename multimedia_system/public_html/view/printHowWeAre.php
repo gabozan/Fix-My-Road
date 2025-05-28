@@ -9,9 +9,9 @@
 
     <h3>Conócenos mejor</h3>
     <ul>
-      <li><a href="https://github.com/usuario1" target="_blank">GitHub de Sebastián Malbaceda</a></li>
-      <li><a href="https://github.com/usuario2" target="_blank">GitHub de Gabriel Rios</a></li>
-      <li><a href="https://github.com/usuario3" target="_blank">GitHub de Zakaria Boudich</a></li>
+      <li><a href="https://github.com/NIU1681519" target="_blank">GitHub de Sebastián Malbaceda</a></li>
+      <li><a href="https://github.com/gabozan" target="_blank">GitHub de Gabriel Rios</a></li>
+      <li><a href="https://github.com/NIU1672001" target="_blank">GitHub de Zakaria Boudich</a></li>
       <!-- Puedes añadir LinkedIn si lo desean -->
     </ul>
   </div>

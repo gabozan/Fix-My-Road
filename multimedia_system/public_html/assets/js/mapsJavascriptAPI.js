@@ -1,5 +1,7 @@
+// Inicializa el mapa con estilo personalizado, leyenda y marcadores de daños.
 function initMap() {
     const centerMap = { lat: 51.5034984, lng: -0.1198804 };
+    // Configuración del mapa (zoom, centro, estilo y controles).
     const mapOptions = {
         center: centerMap,
         zoom: 10,
@@ -183,7 +185,7 @@ function initMap() {
   ]
     };
     const map = new google.maps.Map(document.getElementById('google-map'), mapOptions);
-
+    // Crea y añade la leyenda con los tipos de daño.
     const legend = document.createElement('div');
     legend.id = 'legend';
     legend.innerHTML = `
@@ -198,6 +200,7 @@ function initMap() {
         map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
     });
 
+    // Obtiene los daños desde el servidor y los dibuja en el mapa.
     fetch('index.php?action=get-damages')
     .then(response => response.json())
     .then(markers => {
@@ -205,6 +208,7 @@ function initMap() {
             alert("No se encontraron daños en la base de datos.");
             return;
         }
+        // Asocia tipos de daño con sus íconos correspondientes.
         const iconos = {
             bache: "assets/imgs/señal_bache.png",
             grieta: "assets/imgs/señal_cocodrilo.png",
@@ -216,6 +220,7 @@ function initMap() {
             maxWidth: 200
         });
         const bounds = new google.maps.LatLngBounds();
+        // Crea un marcador por cada daño y lo añade al mapa.
         for (let i = 0; i < markers.length; i++) {
             const tipo = markers[i].damageType.toLowerCase();
             const iconoUrl = iconos[tipo] || "../../assets/logo_banner.png";
@@ -236,6 +241,7 @@ function initMap() {
             });
             bounds.extend(marker.getPosition());
         }
+        // Ajusta el mapa para mostrar todos los marcadores.
         map.fitBounds(bounds);
         infoWindow.addListener('closeclick', function() {
             map.fitBounds(bounds);

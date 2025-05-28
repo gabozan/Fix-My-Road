@@ -14,6 +14,8 @@ let positions = [];
 let lastPosition = null;
 let watchId = null;
 
+// Esta función activa el seguimiento GPS en tiempo real, guardando la última posición en cada cambio.
+// Usa `navigator.geolocation.watchPosition`.
 function startGeolocation() {
   if (!navigator.geolocation) {
     status.textContent = '⚠️ Geolocalización no soportada.';
@@ -26,12 +28,15 @@ function startGeolocation() {
   );
 }
 
+// Detiene la captura continua del GPS, limpiando el watcher activo.
 function stopGeolocation() {
   if (watchId != null) navigator.geolocation.clearWatch(watchId);
 }
 
 let lastLoggedSecond = -1;
 
+// Esta función se ejecuta en cada frame del video usando `requestVideoFrameCallback`.
+// Si está grabando y hay GPS disponible, guarda una posición por segundo.
 function handleFrame(now, metadata) {
   if (!grabando) return;
 
@@ -48,6 +53,9 @@ function handleFrame(now, metadata) {
   video.requestVideoFrameCallback(handleFrame);
 }
 
+// Activa la cámara y el micrófono con getUserMedia.
+// Inicializa el MediaRecorder para poder grabar.
+// También cambia el estado y los botones de la interfaz.
 btnCamara.addEventListener('click', async () => {
   if (!camaraActiva) {
     try {
@@ -69,6 +77,9 @@ btnCamara.addEventListener('click', async () => {
   }
 });
 
+// Controla la grabación con MediaRecorder.
+// Inicia desde cero si no se estaba grabando, o pausa/reanuda según corresponda.
+// También inicia el GPS y el seguimiento por frame.
 btnTransmision.addEventListener('click', () => {
   if (!mediaRecorder) return;
   if (!grabando) {
@@ -93,6 +104,7 @@ btnTransmision.addEventListener('click', () => {
   }
 });
 
+// Detiene la cámara y la grabación, y luego llama al proceso de subida de datos.
 btnTerminar.addEventListener('click', () => {
   cerrarCamara();
   if (mediaRecorder && grabando) {
@@ -103,6 +115,8 @@ btnTerminar.addEventListener('click', () => {
   }
 });
 
+// Detiene todas las pistas del stream (video/audio).
+// También reinicia los botones y variables.
 function cerrarCamara() {
   if (stream) {
     stream.getTracks().forEach(track => track.stop());
@@ -116,6 +130,8 @@ function cerrarCamara() {
   btnTerminar.disabled = true;
 }
 
+// Sube el array de posiciones GPS como JSON a una función en la nube.
+// Luego sube el video como Blob con otro nombre base.
 async function onRecordingStop() {
   const videoBlob = new Blob(chunks, { type: 'video/webm' });
   const timestamp = Date.now();
