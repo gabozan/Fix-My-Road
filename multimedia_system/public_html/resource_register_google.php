@@ -1,3 +1,6 @@
+<?php
+ob_start(); 
+?>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -18,3 +21,6 @@
         <?php require __DIR__ . "/controller/controllerFooter.php" ?>
     </body>
 </html>
+<?php
+ob_end_flush(); // Opcional, pero recomendable para cerrar el buffer manualmente
+?>
