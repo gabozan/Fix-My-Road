@@ -42,7 +42,7 @@ Fix My Road es capaz de identificar distintos tipos de daños frecuentes en el p
 
 ## 📄 Documentación técnica
 
-🧾 Puedes consultar el paper completo aquí:  
+🧾 Puedes consultar el informe técnico en formato IEEE sobre el módulo de detección inteligente:
 📘 [FixMyRoad_Paper.pdf](docs/fixmyroad_paper.pdf)
 
 ## 📲 Demostración en vídeo
@@ -53,3 +53,6 @@ Fix My Road es capaz de identificar distintos tipos de daños frecuentes en el p
 
 El modelo fue entrenado con el **Road Damage Dataset 2022**, que contiene más de 47.000 imágenes de carreteras anotadas con 4 tipos de daño. Las imágenes fueron preprocesadas y anotadas en formato YOLO para optimizar su entrenamiento.
 
+## 📄 Licencia
+
+Este proyecto está bajo la licencia MIT. Puedes consultar más detalles en el archivo [LICENSE](LICENSE).
