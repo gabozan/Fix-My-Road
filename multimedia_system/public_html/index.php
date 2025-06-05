@@ -1,12 +1,16 @@
 <?php
+// Habilita la visualización de errores para facilitar el desarrollo y depuración.
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 
+// Inicia la sesión PHP para manejar variables de sesión a lo largo de las peticiones.
 session_start();
 
+// Obtiene el parámetro 'action' de la URL, o NULL si no está definido.
 $action = $_GET['action'] ?? NULL;
 
+// Estructura switch para cargar diferentes recursos o controladores según el valor de 'action'.
 switch ($action) {
     case 'resource-howWeAre':
         require __DIR__ . '/resource_howWeAre.php';

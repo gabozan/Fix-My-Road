@@ -6,6 +6,8 @@
 // Recorre todos los resultados y los transforma en un array asociativo con claves más amigables para el frontend.
 // Convierte latitud y longitud a tipo float para precisión.
 // Devuelve un array con todos los daños encontrados.
+// Parámetros:
+// - $connection: recurso de conexión a la base de datos PostgreSQL.
 function getDamages($connection) {
     $query = "SELECT damage_type, image_url, latitude, longitude FROM reports";
     $result = pg_query($connection, $query);
