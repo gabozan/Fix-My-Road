@@ -39,3 +39,17 @@ Fix My Road es capaz de identificar distintos tipos de daños frecuentes en el p
 - 🟧 **Grieta transversal**: Perpendicular al eje de circulación.
 - 🟨 **Grieta de cocodrilo**: Patrón ramificado, síntoma de fatiga estructural.
 - 🟥 **Bache**: Pérdida de material que puede afectar la seguridad vial.
+
+## 📄 Documentación técnica
+
+🧾 Puedes consultar el paper completo aquí:  
+📘 [FixMyRoad_Paper.pdf](docs/fixmyroad_paper.pdf)
+
+## 📲 Demostración en vídeo
+
+[🎥 Ver demostración en YouTube](https://youtu.be/2vWIA3rytqo)
+
+## 🧪 Dataset y entrenamiento
+
+El modelo fue entrenado con el **Road Damage Dataset 2022**, que contiene más de 47.000 imágenes de carreteras anotadas con 4 tipos de daño. Las imágenes fueron preprocesadas y anotadas en formato YOLO para optimizar su entrenamiento.
+
