@@ -30,3 +30,12 @@
 4. Se detectan los daños, se clasifican y se guardan en la base de datos.
 5. El resultado se muestra en un mapa interactivo.
 
+## 🧾 Tipos de daños detectados
+
+<p align="center"> <img src="assets/señales.png" width="1200" title="Grieta longitudinal"/> </p>
+
+Fix My Road es capaz de identificar distintos tipos de daños frecuentes en el pavimento:
+- 🟧 **Grieta longitudinal**: Falla paralela al eje de la carretera.
+- 🟧 **Grieta transversal**: Perpendicular al eje de circulación.
+- 🟨 **Grieta de cocodrilo**: Patrón ramificado, síntoma de fatiga estructural.
+- 🟥 **Bache**: Pérdida de material que puede afectar la seguridad vial.
