@@ -185,13 +185,12 @@ function initMap() {
   ]
     };
     const map = new google.maps.Map(document.getElementById('google-map'), mapOptions);
-    // Crea y añade la leyenda con los tipos de daño.
     const legend = document.createElement('div');
     legend.id = 'legend';
     legend.innerHTML = `
         <ul>
           <li><img src="assets/imgs/señal_bache.png" alt="">Bache</li>
-          <li><img src="assets/imgs/señal_cocodrilo.png" alt="">Grieta</li>
+          <li><img src="assets/imgs/señal_cocodrilo.png" alt="">Cocodrilo</li>
           <li><img src="assets/imgs/señal_grieta_longitudinal.png" alt="">Grieta longitudinal</li>
           <li><img src="assets/imgs/señal_grieta_transversal.png" alt="">Grieta transversal</li>
         </ul>
@@ -211,7 +210,7 @@ function initMap() {
         // Asocia tipos de daño con sus íconos correspondientes.
         const iconos = {
             bache: "assets/imgs/señal_bache.png",
-            grieta: "assets/imgs/señal_cocodrilo.png",
+            cocodrilo: "assets/imgs/señal_cocodrilo.png",
             longitudinal: "assets/imgs/señal_grieta_longitudinal.png",
             transversal: "assets/imgs/señal_grieta_transversal.png"
         };
@@ -219,17 +218,19 @@ function initMap() {
             minWidth: 200,
             maxWidth: 200
         });
+
         const bounds = new google.maps.LatLngBounds();
-        // Crea un marcador por cada daño y lo añade al mapa.
+
         for (let i = 0; i < markers.length; i++) {
             const tipo = markers[i].damageType.toLowerCase();
             const iconoUrl = iconos[tipo] || "../../assets/logo_banner.png";
+            const position = { lat: markers[i].lat, lng: markers[i].lng };
             const marker = new google.maps.Marker({
-                position: { lat: markers[i].lat, lng: markers[i].lng },
+                position: position,
                 map: map,
                 icon: {
                     url: iconoUrl,
-                    scaledSize: new google.maps.Size(50, 50)
+                    scaledSize: new google.maps.Size(15, 15)
                 }
             });
             const content = `
@@ -239,12 +240,11 @@ function initMap() {
                 infoWindow.setContent(content);
                 infoWindow.open(map, marker);
             });
-            bounds.extend(marker.getPosition());
+            bounds.extend(position);
         }
-        // Ajusta el mapa para mostrar todos los marcadores.
-        map.fitBounds(bounds);
-        infoWindow.addListener('closeclick', function() {
+
+        if (markers.length > 0) {
             map.fitBounds(bounds);
-        });
-    })
+        }
+    });
 }
