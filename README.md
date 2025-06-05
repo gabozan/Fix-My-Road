@@ -35,9 +35,9 @@
 <p align="center"> <img src="assets/señales.png" width="1200" title="Grieta longitudinal"/> </p>
 
 Fix My Road es capaz de identificar distintos tipos de daños frecuentes en el pavimento:
-- 🟧 **Grieta longitudinal**: Falla paralela al eje de la carretera.
-- 🟧 **Grieta transversal**: Perpendicular al eje de circulación.
-- 🟨 **Grieta de cocodrilo**: Patrón ramificado, síntoma de fatiga estructural.
+- 🟨 **Grieta longitudinal**: Falla paralela al eje de la carretera.
+- 🟨 **Grieta transversal**: Perpendicular al eje de circulación.
+- 🟧 **Grieta de cocodrilo**: Patrón ramificado, síntoma de fatiga estructural.
 - 🟥 **Bache**: Pérdida de material que puede afectar la seguridad vial.
 
 ## 📄 Documentación técnica
