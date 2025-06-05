@@ -53,25 +53,48 @@ function handleFrame(now, metadata) {
   video.requestVideoFrameCallback(handleFrame);
 }
 
-// Activa la cámara y el micrófono con getUserMedia.
-// Inicializa el MediaRecorder para poder grabar.
-// También cambia el estado y los botones de la interfaz.
+async function abrirCamaraTrasera() {
+  try {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const videoDevices = devices.filter(d => d.kind === 'videoinput');
+
+    // Intentar encontrar cámara trasera por etiqueta
+    let backCamera = videoDevices.find(device =>
+      device.label.toLowerCase().includes('back') ||
+      device.label.toLowerCase().includes('rear')
+    );
+
+    let constraints;
+
+    if (backCamera) {
+      // Si hay cámara trasera identificada, usar deviceId exacto
+      constraints = { video: { deviceId: { exact: backCamera.deviceId } }, audio: true };
+    } else {
+      // Si no, usar facingMode: environment (más compatible en móviles)
+      constraints = { video: { facingMode: { ideal: 'environment' } }, audio: true };
+    }
+
+    stream = await navigator.mediaDevices.getUserMedia(constraints);
+
+    video.srcObject = stream;
+    camaraActiva = true;
+    btnCamara.textContent = 'Cerrar Cámara';
+    btnTransmision.disabled = false;
+    btnTerminar.disabled = false;
+
+    mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+    mediaRecorder.ondataavailable = e => chunks.push(e.data);
+    mediaRecorder.onstop = onRecordingStop;
+    status.textContent = '📷 Cámara trasera activa.';
+  } catch (err) {
+    console.error('Error al abrir la cámara trasera:', err);
+    status.textContent = '❌ No se pudo acceder a la cámara trasera.';
+  }
+}
+
 btnCamara.addEventListener('click', async () => {
   if (!camaraActiva) {
-    try {
-      stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-      video.srcObject = stream;
-      camaraActiva = true;
-      btnCamara.textContent = 'Cerrar Cámara';
-      btnTransmision.disabled = false;
-      btnTerminar.disabled = false;
-
-      mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
-      mediaRecorder.ondataavailable = e => chunks.push(e.data);
-      mediaRecorder.onstop = onRecordingStop;
-    } catch (err) {
-      console.error('Error al abrir la cámara:', err);
-    }
+    await Trasera(abrirCamara);
   } else {
     cerrarCamara();
   }
@@ -97,10 +120,12 @@ btnTransmision.addEventListener('click', () => {
     mediaRecorder.pause();
     transmisionActiva = false;
     btnTransmision.textContent = 'Reanudar Transmisión';
+    status.textContent = '⏸ Transmisión pausada.';
   } else if (mediaRecorder.state === 'paused') {
     mediaRecorder.resume();
     transmisionActiva = true;
     btnTransmision.textContent = 'Pausar Transmisión';
+    status.textContent = '🔴 Grabando…';
   }
 });
 
@@ -128,6 +153,7 @@ function cerrarCamara() {
   btnCamara.textContent = 'Abrir Cámara';
   btnTransmision.disabled = true;
   btnTerminar.disabled = true;
+  status.textContent = '📷 Cámara cerrada.';
 }
 
 // Sube el array de posiciones GPS como JSON a una función en la nube.
