@@ -5,12 +5,12 @@ import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstati
 
 // Configuración e inicialización de la app Firebase
 initializeApp({
-    apiKey: "AIzaSyCN24no0cO6RyiFTwRSawgzdVQU2dSR_Vk",
-    authDomain: "fixmyroad-458407.firebaseapp.com",
-    projectId: "fixmyroad-458407",
-    storageBucket: "fixmyroad-458407.firebasestorage.app",
-    messagingSenderId: "322599195853",
-    appId: "1:322599195853:web:69cf06bf0dc5ec7bf64584"
+    apiKey: "",
+    authDomain: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
+    appId: ""
 });
 
 // Asocia el evento de clic al botón de login con Google
