@@ -22,6 +22,10 @@
 - 📤 **Firebase Authentication** – Login con cuenta Google
 - 🗺️ **Google Maps API** – Visualización geolocalizada de los daños
 
+<p align="center">
+  <img src="assets/Arquitectura-FixMyRoad.png" alt="Arquitectura FixMyRoad" width="600"/>
+</p>
+
 ## 🧠 Cómo funciona
 
 1. El usuario accede a la web y se autentica con su cuenta Google.
